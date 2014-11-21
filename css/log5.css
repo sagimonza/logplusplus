@@ -1,0 +1,35 @@
+
+#logFile {
+	display: inline-block;
+}
+
+.filterAction, .limitAction {
+	max-width: 150px;
+	display: inline-block;
+}
+
+#content {
+    height: 80%;
+    overflow: auto;
+    background-color: black
+}
+
+.error {
+	color: red;
+}
+
+.warn {
+	color: orange;
+}
+
+.info {
+	color: blue;
+}
+
+.debug, .trace {
+	color: white;
+}
+
+.hidden {
+	display: none;
+}

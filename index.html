@@ -1,0 +1,33 @@
+<html>
+<head>
+
+<link href="css/lib/bootstrap.min.css" rel="stylesheet">
+<link href="css/lib/magicsuggest-min.css" rel="stylesheet">
+
+<link href="css/log5.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div id="actionBar">
+	<input id="logFile" type="file" class="fileAction" />
+	<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>
+	<input id="pause" type="button" value="Pause" class="logAction" />
+	<input id="resume" type="button" value="Resume" class="logAction" />
+	<input id="clear" type="button" value="Clear" class="logAction" />
+<!--<label><input id="errorsFilter" type="checkbox" class="filterAction" />errors</label>
+	<label><input id="warnFilter" type="checkbox" class="filterAction" />warnings</label>
+-->	<input id="Info_Filters" class="filterAction" />
+	<input id="Debug_Filters" class="filterAction" />
+	<input id="Trace_Filters" class="filterAction" />
+</div>
+<div id="content"></div>
+
+<script src="js/lib/jquery-2.1.1.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/magicsuggest-min.js"></script>
+
+<script src="js/log5.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+- extensible right pane with tabs for all sorts of views
+    - zapp xml, scroll into view of webcontrol/context/etc.
+    - iframe for mobile preview
+- extensible action bar for all sorts of actions
+    - multi filter
+    - multi search (Assaf's)
+- shareable configurations (json)
+- extensible feeder (local file, websockets, etc.)
+- plugin model
