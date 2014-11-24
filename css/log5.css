@@ -1,3 +1,74 @@
+body {
+    margin: 0px;
+    font-family: "Helvetica Neue Light", "Lucida Grande", "Calibri", "Arial", sans-serif;
+}
+
+.header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.actionsHeader {
+    height: 60px;
+    -webkit-transition:height 1s;
+    transition:height 1s;
+    background-color: lightgray;
+
+}
+
+.header.collapsed > .actionsHeader {
+    height: 0px;
+    overflow: hidden;
+}
+
+.header.expanding > .actionsHeader {
+    overflow: hidden;
+}
+
+.expandCollapse {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    left: 50%;
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.expandCollapse:before {
+    content: ">>";
+    background-color: lightgray;;
+}
+
+.header.collapsed > .expandCollapse {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.hidden {
+    display: none;
+}
+
+.main {
+    height: 100%;
+}
+
+.log {
+    display: inline-block;
+    height: 100%;
+    width: 80%;
+    overflow: auto;
+    background-color: black
+}
+
+.sidebar {
+    width: 20%;
+    background-color: green;
+}
+
+
+
 
 #logFile {
 	display: inline-block;
@@ -6,12 +77,6 @@
 .filterAction, .limitAction {
 	max-width: 150px;
 	display: inline-block;
-}
-
-#content {
-    height: 80%;
-    overflow: auto;
-    background-color: black
 }
 
 .error {
@@ -23,7 +88,7 @@
 }
 
 .info {
-	color: blue;
+	color: dodgerblue;
 }
 
 .debug, .trace {

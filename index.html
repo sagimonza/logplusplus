@@ -1,33 +1,40 @@
 <html>
 <head>
 
-<link href="css/lib/bootstrap.min.css" rel="stylesheet">
-<link href="css/lib/magicsuggest-min.css" rel="stylesheet">
+<link href="css/lib/multiple-select.css" rel="stylesheet">
 
 <link href="css/log5.css" rel="stylesheet">
+
+<script src="js/lib/jquery-2.1.1.min.js"></script>
+<script src="js/lib/underscore-min.js"></script>
+<script src="js/lib/backbone-min.js"></script>
+<script src="js/lib/jquery.multiple.select.js"></script>
 
 </head>
 
 <body>
-<div id="actionBar">
-	<input id="logFile" type="file" class="fileAction" />
-	<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>
-	<input id="pause" type="button" value="Pause" class="logAction" />
-	<input id="resume" type="button" value="Resume" class="logAction" />
-	<input id="clear" type="button" value="Clear" class="logAction" />
-<!--<label><input id="errorsFilter" type="checkbox" class="filterAction" />errors</label>
-	<label><input id="warnFilter" type="checkbox" class="filterAction" />warnings</label>
--->	<input id="Info_Filters" class="filterAction" />
-	<input id="Debug_Filters" class="filterAction" />
-	<input id="Trace_Filters" class="filterAction" />
+<div id="actionBar" class="header">
+    <div class="actionsHeader">
+        <input id="logFile" type="file" class="fileAction" />
+        <label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>
+        <input id="pause" type="button" value="Pause" class="logAction" />
+        <input id="resume" type="button" value="Resume" class="logAction" />
+        <input id="clear" type="button" value="Clear" class="logAction" />
+        <select id="Severity_Filters" multiple></select>
+        <!--<select id="Custom_Filters" multiple></select>-->
+    </div>
+    <div class="expandCollapse"></div>
 </div>
-<div id="content"></div>
 
-<script src="js/lib/jquery-2.1.1.min.js"></script>
-<script src="js/lib/bootstrap.min.js"></script>
-<script src="js/lib/magicsuggest-min.js"></script>
+<div class="main">
+    <div id="content" class="log"></div>
+    <div id="views" class="sidebar"></div>
+</div>
 
 <script src="js/log5.js"></script>
+<script src="js/models/ActionBar.js"></script>
+<script src="js/views/ActionBar.js"></script>
+
 </body>
 
 </html>

@@ -1,9 +1,19 @@
-- extensible right pane with tabs for all sorts of views
+- extensible right pane with tabs for all sorts of views (dockable & collapsable)
     - zapp xml, scroll into view of webcontrol/context/etc.
     - iframe for mobile preview
-- extensible action bar for all sorts of actions
-    - multi filter
+    - web control data (mc, ctx, page, parent, template, etc.)
+- extensible action bar for all sorts of actions (dockable & collapsable)
+    - multi filter (info/debug/etc. default/replay/context/etc.)
     - multi search (Assaf's)
-- shareable configurations (json)
+- customizable (xpath/js) coloring filters
+- customizable (xpath/js) visibility filters
+- shareable configurations (json) + editor (dialog)
 - extensible feeder (local file, websockets, etc.)
 - plugin model
+- extensible line parser
+- extensible per line actions (allow user to turn on/off)
+    - play "sending message"
+    - mouseover on wc/ctx show its data or rendered mobile data
+- line numbers (on/off)
+- from line filter
+- opposite sort (from the end to start)
