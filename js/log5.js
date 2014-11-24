@@ -4,20 +4,15 @@ window.Log = {
 	Models	: {},
 	Views	: {}
 };
-/*
-$(".expandCollapse").on("click", function() {
-	var actionBar = $("#actionBar");
-	if (actionBar.hasClass("collapsed")) {
-		actionBar.removeClass("collapsed");
-	} else {
-		actionBar.addClass("collapsed");
-	}
-});*/
 
 var FILTER_KEY_DELIM = "_";
 
 function createFilterKey(severity, type) {
 	return severity.concat(FILTER_KEY_DELIM, type);
+}
+
+function createCustomFilterKey(type) {
+	return createFilterKey("custom", type);
 }
 
 function parseFilterKey(key) {
@@ -56,11 +51,11 @@ function clear() {
 
 var customFilters = {
 	"mcActions" : [
-		{ regexp : /- received msg: |- doing event: /, filter : "mcActions" }
+		{ regexp : /- received msg: |- doing event: / }
 	],
 
 	"responses" : [
-		{ regexp : /- sending message to mobile /, filter : "responses" }
+		{ regexp : /- sending message to mobile / }
 	]
 };
 
@@ -70,11 +65,13 @@ var lineParsers = {
 	severity : [
 		{ name : "designerLine", regexp : /^([\d:.]+) ([^-]*)- ([^-]*)- (.*)/, type : 2, severity : 3 },
 		{ name : "runtimeLine", regexp : /^[\d-]+ ([\d:.]+) ([^ ]+) [ ]*[^ ]* - ([^-]*)- (.*)/, type : 3, severity : 2 },
-		{ name : "logStart", regexp : /=-=-=-=-=-=-=-=-=-=-/, type : "start", severity : "info" }
+		{ name : "logStart", regexp : /=-=-=-=-=-=-=-=-=-=-/, type : "default", severity : "info" }
 	],
 
-	custom : customFilterTypes.reduce(function(unionFilters, filterName) { return unionFilters.concat(customFilters[filterName]); }, [])
-}
+	custom : customFilterTypes.reduce(function(unionFilters, filterName) {
+		customFilters[filterName].forEach(function(filter) { filter.filterKey = createCustomFilterKey(filterName) })
+		return unionFilters.concat(customFilters[filterName]); }, [])
+};
 
 function addLine(text) {
 	var lineDiv = document.createElement("div");
@@ -97,7 +94,7 @@ function addLine(text) {
 		severity = lastLine.getAttribute("severity");
 	}
 
-	if (type != "start" && !logKeys[type]) type = "default";
+	if (!logKeys[type]) type = "default";
 	
 	lineDiv.setAttribute("type", type);
 	lineDiv.setAttribute("severity", severity);
@@ -105,7 +102,7 @@ function addLine(text) {
 	lineDiv.textContent = text;
 
 	var filters = [createFilterKey(severity, type)].concat(lineParsers.custom.map(function(parser) {
-		return parser.regexp.test(text) && parser.filter; }).filter(function(filter) { return !!filter; }));
+		return parser.regexp.test(text) && parser.filterKey; }).filter(function(filter) { return !!filter; }));
 
 	filters.forEach(function(filter, index) { lineDiv.setAttribute("filter" + index, filter); });
 
@@ -163,37 +160,28 @@ function checkFilter(filters) {
 }
 
 function setSeverityFilters(filterKeys) {
-	console.log("filterKeys:" + filterKeys);
-	var checkedFilterSeverities = {};
-	filterKeys.forEach(function(key) {
-		var filterObj = parseFilterKey(key);
-		checkedFilterSeverities[filterObj.severity] = checkedFilterSeverities[filterObj.severity] || [];
-		checkedFilterSeverities[filterObj.severity].push(filterObj.type);
-	});
+	function buildFilterSelector(key) {
+		return [0, 1, 2, 3].map(function(i) { return "[filter".concat(i, "=", key, "]"); }).join(",");
+	}
+	function extractFilterAttrs(elem) {
+		return [0, 1, 2, 3].map(function(i) { return elem.getAttribute("filter" + i); }).filter(function(key) { return !!key });
+	}
 
-	filterSeveritiesKeys.forEach(function(severity) {
-		var severityTypes = checkedFilterSeverities[severity];
-		logTypes.forEach(function(type) {
-			var typeFilteredIn = severityTypes && severityTypes.indexOf(type) > -1, filterKey = createFilterKey(severity, type);
-			if (typeFilteredIn) {
-				console.log("filtered in:" + type + " severity:" + severity);
-				if (!logFilterKeys[filterKey])
-					Array.prototype.slice.call(contentElem.querySelectorAll("[filter0=".concat(filterKey, "]"))).forEach(function(line) {
-						line.classList.remove("hidden"); });
-			} else if (logFilterKeys[filterKey]) {
-				Array.prototype.slice.call(contentElem.querySelectorAll("[filter0=".concat(filterKey, "]"))).forEach(function(line) {
-					line.classList.add("hidden"); });
-			}
-			logFilterKeys[filterKey] = typeFilteredIn;
+	console.log("filterKeys:" + filterKeys);
+	var changedKeys = filterKeys.filter(function(key) { return !logFilterKeys[key]; }).
+		concat(Object.keys(logFilterKeys).filter(function(key) { return logFilterKeys[key] && filterKeys.indexOf(key) == -1; }));
+
+	changedKeys.forEach(function(key) { logFilterKeys[key] = filterKeys.indexOf(key) > -1; });
+
+	changedKeys.forEach(function(key) {
+		Array.prototype.slice.call(contentElem.querySelectorAll(buildFilterSelector(key))).forEach(function(line) {
+			if (checkFilter(extractFilterAttrs(line))) line.classList.add("hidden");
+			else line.classList.remove("hidden");
 		});
 	});
 }
 
-function setCustomFilters(filterKeys) {
-
-}
-
-var logFilterKeys = { "info_start" : true };
+var logFilterKeys = {};
 
 var logKeys = {
 	"default" : {},
@@ -208,7 +196,7 @@ var logKeys = {
 
 var logTypes = Object.keys(logKeys);
 
-var filterSeverities = {
+var severityFilters = {
 	"error"		: {},
 	"warn"		: {},
 	"info"		: {},
@@ -216,22 +204,34 @@ var filterSeverities = {
 	"trace"		: {}
 };
 
-var filterSeveritiesKeys = Object.keys(filterSeverities);
+var severityFilterKeys = Object.keys(severityFilters);
 
 function initFilters() {
 	function _setFilters() {
-		setSeverityFilters($("#Severity_Filters").multipleSelect("getSelects"));
+		setSeverityFilters($("#All_Filters").multipleSelect("getSelects"));
 	}
 
-	var select = $("#Severity_Filters");
-	filterSeveritiesKeys.forEach(function(severity) {
+	function addFilterOption(group, type, severity) {
+		var opt = document.createElement("option");
+		$(opt).attr("value", severity ? createFilterKey(severity, type) : createCustomFilterKey(type)).text(type);
+		group.insertBefore(opt, null);
+	}
+
+	var select = $("#All_Filters");
+
+	var customFilterGroup;
+	customFilterTypes.forEach(function(type) {
+		customFilterGroup = customFilterGroup || document.createElement("optgroup");
+		$(customFilterGroup).attr("label", "custom");
+		addFilterOption(customFilterGroup, type);
+	});
+
+	if (customFilterGroup) select.get(0).insertBefore(customFilterGroup, null);
+
+	severityFilterKeys.forEach(function(severity) {
 		var filterGroup = document.createElement("optgroup");
 		$(filterGroup).attr("label", severity);
-		logTypes.forEach(function(type) {
-			var opt = document.createElement("option");
-			$(opt).attr("value", createFilterKey(severity, type)).text(type);
-			filterGroup.insertBefore(opt, null);
-		});
+		logTypes.forEach(function(type) { addFilterOption(filterGroup, type, severity); });
 		select.get(0).insertBefore(filterGroup, null);
 	});
 
