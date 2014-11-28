@@ -11,6 +11,9 @@ body {
 }
 
 .actionsHeader {
+    padding-top: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
     height: 60px;
     -webkit-transition:height 1s;
     transition:height 1s;
@@ -46,6 +49,10 @@ body {
     transform: rotate(90deg);
 }
 
+#All_Filters {
+    display: none;
+}
+
 .hidden {
     display: none;
 }
@@ -67,8 +74,34 @@ body {
     background-color: green;
 }
 
+.filePickerWrapper {
+    position: relative;
+    display: inline-block;
+    border: 2px solid #009BE7;
+}
 
+.filePickerButton {
+    cursor: pointer;
+}
 
+.filePicker {
+    pointer-events: none;
+    opacity: 0;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+#pickedFilename {
+    display: inline-block;
+    min-width: 100px;
+    max-width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    text-align: center;
+}
 
 #logFile {
 	display: inline-block;

@@ -38,6 +38,6 @@ Log.Views.ActionBarClass = Backbone.View.extend({
 	}
 });
 
-window.actionBarView = new Log.Views.ActionBarClass({ model : new Log.Models.ActionBarClass(), el : $("#actionBar").get(0) });
+var actionBarView = new Log.Views.ActionBarClass({ model : new Log.Models.ActionBarClass(), el : $("#actionBar").get(0) });
 
 })();

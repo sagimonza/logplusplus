@@ -1,8 +1,9 @@
 (function() {
 
 window.Log = {
-	Models	: {},
-	Views	: {}
+	Models:			{},
+	Collections:	{},
+	Views:			{}
 };
 
 var FILTER_KEY_DELIM = "_";
@@ -12,7 +13,7 @@ function createFilterKey(severity, type) {
 }
 
 function createCustomFilterKey(type) {
-	return createFilterKey("custom", type);
+	return createFilterKey("filter", type);
 }
 
 function parseFilterKey(key) {
@@ -68,8 +69,8 @@ var lineParsers = {
 		{ name : "logStart", regexp : /=-=-=-=-=-=-=-=-=-=-/, type : "default", severity : "info" }
 	],
 
-	custom : customFilterTypes.reduce(function(unionFilters, filterName) {
-		customFilters[filterName].forEach(function(filter) { filter.filterKey = createCustomFilterKey(filterName) })
+	filter : customFilterTypes.reduce(function(unionFilters, filterName) {
+		customFilters[filterName].forEach(function(filter) { filter.filterKey = createCustomFilterKey(filterName) });
 		return unionFilters.concat(customFilters[filterName]); }, [])
 };
 
@@ -101,7 +102,7 @@ function addLine(text) {
 	lineDiv.classList.add(severity);
 	lineDiv.textContent = text;
 
-	var filters = [createFilterKey(severity, type)].concat(lineParsers.custom.map(function(parser) {
+	var filters = [createFilterKey(severity, type)].concat(lineParsers.filter.map(function(parser) {
 		return parser.regexp.test(text) && parser.filterKey; }).filter(function(filter) { return !!filter; }));
 
 	filters.forEach(function(filter, index) { lineDiv.setAttribute("filter" + index, filter); });
@@ -143,6 +144,9 @@ var logFile;
 document.getElementById("logFile").addEventListener("change", function(e) {
 	clear();
 	logFile = this.files.item(0);
+	var filename = (logFile && logFile.name) || "";
+	document.title = filename;
+	$("#pickedFilename").text(filename).attr("title", filename);
 	resume();
 });
 

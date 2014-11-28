@@ -2,18 +2,24 @@
     - zapp xml, scroll into view of webcontrol/context/etc.
     - iframe for mobile preview
     - web control data (mc, ctx, page, parent, template, etc.)
+    - json viewer - https://github.com/josdejong/jsoneditor/
+    - gallery of images (snapshot)
 - extensible action bar for all sorts of actions (dockable & collapsable)
     - multi filter (info/debug/etc. default/replay/context/etc.)
     - multi search (Assaf's)
 - customizable (xpath/js) coloring filters
 - customizable (xpath/js) visibility filters
 - shareable configurations (json) + editor (dialog)
-- extensible feeder (local file, websockets, etc.)
+- extensible feeder
+    - local file
+    - local zip file (extensible structure) - http://stuk.github.io/jszip/
+    - websockets
 - plugin model
 - extensible line parser
 - extensible per line actions (allow user to turn on/off)
     - play "sending message"
     - mouseover on wc/ctx show its data or rendered mobile data
+    - click JSON objects to show them on the right pane
 - line numbers (on/off)
 - from line filter
 - opposite sort (from the end to start)
