@@ -1,6 +1,7 @@
 <html>
 <head>
 
+    <link rel="stylesheet" href="font-awesome-4.2.0/css/font-awesome.min.css" />
     <link href="css/lib/pure-min.css" rel="stylesheet">
     <link href="css/lib/multiple-select.css" rel="stylesheet">
 
@@ -22,16 +23,15 @@
     <div class="actionsHeader">
         <div class="filePickerWrapper">
             <input id="logFile" type="file" class="filePicker"/>
-            <a href="javascript:void(0)" class="filePickerButton pure-button pure-button-primary" onclick="$('#logFile').click();">Open...</a><div id="pickedFilename"></div>
+            <a href="javascript:void(0)" class="filePickerButton pure-button pure-button-primary" onclick="$('#logFile').click();"><span class="fa fa-file-text"></span></a><div id="pickedFilename"></div>
         </div>
-        <a id="pause" href="javascript:void(0)" class="pure-button pure-button-primary">Pause</a>
-        <a id="resume" href="javascript:void(0)" class="pure-button pure-button-primary">Resume</a>
-        <a id="clear" href="javascript:void(0)" class="pure-button pure-button-primary">Clear</a>
-        <a id="clear" href="javascript:void(0)" class="pure-button pure-button-primary">Reload</a>
+        <a id="pause" href="javascript:void(0)" class="pure-button pure-button-primary"><span class="playPauseToggle fa fa-pause"></span></a>
+        <a id="clear" href="javascript:void(0)" class="pure-button pure-button-primary"><span class="fa fa-remove"></span></a>
+        <a id="reload" href="javascript:void(0)" class="pure-button pure-button-primary"><span class="fa fa-refresh"></span></a>
         <select id="All_Filters" multiple></select>
-        <label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>
+        <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
     </div>
-    <div class="expandCollapse"></div>
+    <div class="expandCollapse fa fa-angle-double-up"></div>
     </div>
 
     <div class="main">

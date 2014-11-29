@@ -16,6 +16,8 @@ $(document).ready(function() {
 
 	var consoleLines = new Log.Views.ConsoleLinesClass({ collection : new Log.Collections.ConsoleLinesClass(), dataFeedModel : dataFeedModel, filtersModel : filtersModel });
 
+	$("#clear").on("click", consoleLines.clear.bind(consoleLines));
+	$("#reload").on("click", consoleLines.clear.bind(consoleLines));
 });
 
 })();

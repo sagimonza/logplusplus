@@ -2,7 +2,7 @@
 
 Log.Models.DataFeedClass = Backbone.Model.extend({
 	initialize: function() {
-		this.on("change:paused", this.onPausedChanged);
+		this.on("change:paused", this.onPausedChanged.bind(this));
 	},
 
 	onPausedChanged: function() {},

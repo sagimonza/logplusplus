@@ -14,16 +14,20 @@ body {
     padding-top: 3px;
     padding-left: 3px;
     padding-right: 3px;
-    height: 60px;
-    -webkit-transition:height 1s;
-    transition:height 1s;
-    background-color: lightgray;
+    padding-bottom: 3px;
+    -webkit-transition:height 1s, padding-bottom 1s, padding-top 1s, border-bottom 1s;
+    transition:height 1s, padding-bottom 1s, padding-top 1s, border-bottom 1s;
+    background-color: #fbfbfb;
+    border-bottom: 2px solid grey;
 
 }
 
 .header.collapsed > .actionsHeader {
     height: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     overflow: hidden;
+    border-bottom: 2px solid #fbfbfb;
 }
 
 .header.expanding > .actionsHeader {
@@ -35,18 +39,14 @@ body {
     cursor: pointer;
     position: relative;
     left: 50%;
-    -webkit-transform: rotate(-90deg);
-    transform: rotate(-90deg);
-}
-
-.expandCollapse:before {
-    content: ">>";
-    background-color: lightgray;;
+    background-color: #fbfbfb;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .header.collapsed > .expandCollapse {
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 #All_Filters {

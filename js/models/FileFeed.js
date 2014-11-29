@@ -18,6 +18,10 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 		this.trigger("dataAvailable", this._fr.result);
 	},
 
+	onPausedChanged: function() {
+		this.nextChunk();
+	},
+
 	reset: function(startIndex) {
 		try { this._fr.abort(); } catch(ex) {}
 		if (typeof startIndex == "number") this.set("lastIndex", startIndex);
@@ -27,7 +31,9 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 	nextChunk: function() {
 		if (this.get("paused")) return;
 
-		var file = this.get("file");
+		var file = this.get("feed");
+		if (!file) return;
+
 		if (file.size < this.get("lastIndex")) this.reset(0);
 
 		this._fr.readAsText(file.slice(this.get("lastIndex")));

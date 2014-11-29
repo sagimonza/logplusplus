@@ -4,18 +4,7 @@ Log.Collections.ConsoleLinesClass = Backbone.Collection.extend({
 	model: Log.Models.ConsoleLineClass,
 
 	initialize: function() {
-		this.on("add", this.onLineAdded)
-	},
-
-	onLineAdded: function(model) {
-		if (!LineTypes[model.get("type")]) {
-			var lastLineModel = this.last();
-			var type = (lastLineModel && lastLineModel.get("type")) || "default";
-			var severity = (lastLineModel && lastLineModel.get("severity")) || "info";
-
-			model.set("type", lastLineModel.get("type"));
-			model.set("severity", lastLineModel.get("severity"));
-		}
+		this.activeFilterKeys = {};
 	},
 
 	changeActiveFilters: function(activeFilterKeys) {
@@ -29,7 +18,7 @@ Log.Collections.ConsoleLinesClass = Backbone.Collection.extend({
 	},
 
 	reset: function() {
-		this.each(function(consoleLine) { consoleLine.trigger("deleted"); });
+		this.each(function(consoleLine) { consoleLine.trigger("deleted", consoleLine); });
 		Backbone.Collection.prototype.reset.apply(this, arguments);
 	}
 });

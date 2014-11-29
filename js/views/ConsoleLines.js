@@ -1,30 +1,29 @@
 ;(function() {
 
-Log.Views.ConsoleLinesClass = Backbone.Marionette.CollectionView.extend({
+Log.Views.ConsoleLinesClass = Backbone.View.extend({
 	el: "#content",
 
 	childView: Log.Views.ConsoleLineClass,
-
-	events: {
-		"activeFilterChangedKeys": "onActiveFilterChangedKeys",
-		"click #clear": "clear",
-		"click #pause": "stopChunks",
-		"click #reload": "clear"
-	},
 
 	initialize: function(options) {
 		this.dataFeedModel = options.dataFeedModel;
 		this.filtersModel = options.filtersModel;
 
 		this.listenTo(this.dataFeedModel, "change:feed", this.clear);
+		this.listenTo(this.dataFeedModel, "change:paused", this.onPausedToggled);
 		this.listenTo(this.dataFeedModel, "dataAvailable", this.onDataAvailable);
 		this.listenTo(this.filtersModel, "change:activeFilters", this.changeActiveFilters);
-		this.listenTo(this.collection, "change:filters", this.onLineFiltersChanged)
+		this.listenTo(this.collection, "change:hidden", this.onHiddenChange);
+		this.listenTo(this.collection, "activeFilterChangedKeys", this.onActiveFilterChangedKeys);
+		this.listenTo(this.collection, "deleted", this.delete);
 	},
 
 	clear: function() {
-		this.stopChunks();
 		this.collection.reset();
+	},
+
+	onPausedToggled: function(model, paused) {
+		if (paused) this.stopChunks();
 	},
 
 	stopChunks: function() {
@@ -33,7 +32,6 @@ Log.Views.ConsoleLinesClass = Backbone.Marionette.CollectionView.extend({
 	},
 
 	onDataAvailable: function(data) {
-		console.log("ConsoleLines:onDataAvailable");
 		var $this = this;
 		if (data) {
 			_.defer(function() { $this.dataFeedModel.nextChunk(); });
@@ -44,38 +42,41 @@ Log.Views.ConsoleLinesClass = Backbone.Marionette.CollectionView.extend({
 	},
 
 	addLines: function(data) {
-		var $this = this, scrollIntoView = this.isScrolledToBottom(), newLines = [];
-		data.replace(/[^\n]*\n/g, function(line) { newLines.push(new Log.Models.ConsoleLineClass({ raw : line })); });
-		this.collection.add(newLines);
+		function addLine(line) {
+			var model = createLineModel(line, prevLine);
+			model.applyFilters($this.collection.activeFilterKeys);
+
+			model.__view = createLineView(model);
+			$this.el.appendChild(model.__view.el);
+			prevLine = line;
+
+			models.push(model);
+		}
+
+		var $this = this, scrollIntoView = this.isScrolledToBottom(), newLines = [], prevLine, models = [];
+		data.replace(/[^\n]*\n/g, function(line) { addLine(line); });
+		$this.collection.add(models);
+
 		this.pruneLines();
-		this.render();
-		if (scrollIntoView) this.collection.last().scrollIntoView();
+		if (scrollIntoView) this.collection.last().__view.scrollIntoView();
 	},
 
 	changeActiveFilters: function(model, activeFilterKeys) {
-		console.log("activeFilterKeys:" + activeFilterKeys);
 		this.collection.changeActiveFilters(activeFilterKeys);
 	},
 
 	onActiveFilterChangedKeys: function(changedKeys) {
-		function buildFilter(key) {
-			var filter = {};
-			[0, 1, 2, 3].forEach(function(i) { filter["filter" + i] = key; });
-			return filter;
+		function buildFilterSelector(key) {
+			return [0, 1, 2, 3].map(function(i) { return "[filter".concat(i, "=", key, "]"); }).join(",");
 		}
-
-		// todo: consider using css selector to gain performance boost
-		changedKeys.forEach(function(key) { this._applyFilters(this.collection.where(buildFilter(key))); }, this);
+		changedKeys.forEach(function(key) { this._applyFilters(Array.prototype.slice.call($(buildFilterSelector(key)), this.el)); }, this);
 	},
 
-	onLineFiltersChanged: function(model, filters) {
-		this._applyFilters([model]);
-	},
-
-	_applyFilters: function(lines) {
-		var activeFilters = this.collection.get("activeFilterKeys");
-		Array.prototype.slice.call(lines).forEach(function(lineModel) {
-			if (lineModel.get("filters").every(function(filter) { return !activeFilters[filter]; })) lineModel.set("hidden", true);
+	_applyFilters: function(lineElems) {
+		var activeFilters = this.collection.activeFilterKeys;
+		lineElems.forEach(function(lineElem) {
+			var lineModel = lineElem.__model;
+			if (lineModel.filters.every(function(filter) { return !activeFilters[filter]; })) lineModel.set("hidden", true);
 			else lineModel.set("hidden", false);
 		});
 	},
@@ -90,13 +91,53 @@ Log.Views.ConsoleLinesClass = Backbone.Marionette.CollectionView.extend({
 		//lastIndex = 0;
 	},
 
+	onHiddenChange: function(model, hidden) {
+		if (!model.__view) return;
+
+		if (hidden) {
+			model.__view.hide();
+		} else {
+			model.__view.show();
+		}
+	},
+
+	delete: function(lineModel) {
+		lineModel.__view.el.remove();
+	},
+
 	isScrolledToBottom: function() {
 		var lastLineModel = this.collection.last();
-		if (!lastLineModel) return false;
+		if (!lastLineModel  || !lastLineModel.__view) return true;
 
-		var lastLineHeight = this.children.findByModel(lastLineModel).getHeight();
+		var lastLineHeight = lastLineModel.__view.getHeight();
 		return this.el.scrollTop + this.el.clientHeight >= this.el.scrollHeight - (lastLineHeight / 2);
 	}
 });
+
+function createLineModel(line, prevLine) {
+	return new Log.Models.ConsoleLineClass({ raw: line, prevLine: line });
+}
+
+function createLineView(lineModel) {
+	var view = document.createElement("div");
+	var hidden = lineModel.get("hidden") ? "hidden" : "";
+	view.setAttribute("type", lineModel.type);
+	view.setAttribute("severity", lineModel.severity);
+	view.setAttribute("class", "logLine ".concat(lineModel.severity, " ", hidden));
+
+	var filters = lineModel.filters, filterLen = filters.length;
+	for (var i = 0; i < filterLen; ++i) view.setAttribute("filter" + i, filters[i]);
+
+	view.textContent = lineModel.text;
+	view.el = view;
+	view.render = function() { return this; };
+	view.hide = function() { $(this).addClass("hidden"); };
+	view.show = function() { $(this).removeClass("hidden"); };
+	view.getHeight = function() { return $(this).height(); };
+
+	view.__model = lineModel;
+
+	return view;
+}
 
 })();

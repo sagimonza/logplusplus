@@ -2,6 +2,7 @@
 
 Log.Models.ConsoleLineClass = Backbone.Model.extend({
 	initialize: function() {
+		var p1 = performance.now();
 		var type, severity;
 
 		var text = this.get("raw");
@@ -14,14 +15,35 @@ Log.Models.ConsoleLineClass = Backbone.Model.extend({
 			}
 		});
 
-		if (type) {
-			this.set("type", type);
-			if (severity) this.set("severity", severity);
+		if (LineTypes[type]) {
+			this.type = type;
+			if (severity) this.severity = severity;
+		} else {
+			var lastLineModel = this.get("prevLine");
+			this.type = (lastLineModel && lastLineModel.type) || "default";
+			this.severity = (lastLineModel && lastLineModel.severity) || "info";
 		}
 
-		this.set("filters", LineFilters.filter(function(filter) { return filter.test(this); }, this).map(function(filter) { return filter.filterKey; }));
-		this.set("text", text);
+		this.text = text;
+
+		window.consoleLineModelTime += (performance.now() - p1);
+	},
+
+	applyFilters: function(activeFilters) {
+		var modelFilters = this.filters = LineFilters.getFilterKeys(this), modelFiltersLen = modelFilters.length;
+		var visibleModel;
+
+		for (var i = 0; !visibleModel && i < modelFiltersLen; ++i) {
+			if (activeFilters[modelFilters[i]]) {
+				visibleModel = true;
+			}
+		}
+
+		if (visibleModel) this.set("hidden", false, { silent: true });
+		else this.set("hidden", true, { silent: true });
 	}
 });
+
+	window.consoleLineModelTime = 0;
 
 })();

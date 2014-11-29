@@ -1,25 +1,11 @@
 ;(function() {
 
-Log.Views.ConsoleLineClass = Backbone.Marionette.ItemView.extend({
-	template: function(serialized_model) {
-		return _.template($("#consoleLineTemplate").html(), { variable: "args" })(serialized_model);
-	},
+Log.Views.ConsoleLineClass = Backbone.View.extend({
+	tagName: "div",
 
-	initialize: function() {
-		this.listenTo(this.model, "change:hidden", this.onHiddenChange);
-		this.listenTo(this.model, "deleted", this.delete);
-	},
-
-	onHiddenChange: function(model, hidden) {
-		if (hidden) {
-			this.hide();
-		} else {
-			this.show();
-		}
-	},
-
-	delete: function() {
-		this.el.remove();
+	render: function() {
+		this.$el.text(this.model.get("text"));
+		return this;
 	},
 
 	show: function() {
@@ -33,7 +19,7 @@ Log.Views.ConsoleLineClass = Backbone.Marionette.ItemView.extend({
 	},
 
 	getHeight: function() {
-		return this.el.clientHeight;
+		return this.$el.height();
 	},
 
 	scrollIntoView: function() {

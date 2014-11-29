@@ -121,7 +121,9 @@ function pruneLines() {
 
 function onNewDataAvail(res) {
 	var lastLine = contentElem.lastChild, scrollIntoView = isScrolledToBottom(lastLine);
+	var ts = Date.now();
 	res.replace(/[^\n]*\n/g, function(line) { addLine(line); });
+	console.log("total time:" + (Date.now() - ts));
 	pruneLines();
 	if (contentElem.lastChild && scrollIntoView) contentElem.lastChild.scrollIntoView();
 }

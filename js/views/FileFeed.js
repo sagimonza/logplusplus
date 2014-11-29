@@ -4,16 +4,18 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 	el: ".filePickerWrapper",
 
 	events: {
-		"change #logFile": "onFileChanged",
-		"click #reload": "reload"
+		"change #logFile": "onFileChanged"
 	},
 
 	initialize: function() {
-		this.listenTo(this.model, "change:file", this.render);
+		this.listenTo(this.model, "change:feed", this.render);
+		$("#reload").click(this.reload.bind(this));
+		Log.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
 
 	render: function() {
-		var filename = this.model.get("file").name || "";
+		var file = this.model.get("feed");
+		var filename = (file && file.name) || "";
 		document.title = filename;
 		$("#pickedFilename").text(filename);
 	},
@@ -32,7 +34,7 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 
 	onFileChanged: function(e) {
 		this.model.reset(0);
-		this.model.set({ file: e.target.files.item(0) });
+		this.model.set({ feed: e.target.files.item(0) });
 		this.model.nextChunk();
 	}
 });

@@ -6,6 +6,7 @@ Log.Views.ActionBarClass = Backbone.View.extend({
 	},
 
 	initialize: function() {
+		this.$actionsHeader = $(".actionsHeader");
 		this.listenTo(this.model, "change:collapsed", this.render);
 	},
 
@@ -25,10 +26,14 @@ Log.Views.ActionBarClass = Backbone.View.extend({
 		this.$el.one("transitionend", function() {
 			$this.$el.removeClass("expanding"); });
 		this.$el.removeClass("collapsed");
+		this.$actionsHeader.height(this._height);
 		return this;
 	},
 
 	hide: function() {
+		this._height = this.$actionsHeader.height();
+		this.$actionsHeader.height(this._height);
+		this.$actionsHeader.height(0);
 		this.$el.addClass("collapsed");
 		return this;
 	},
