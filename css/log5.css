@@ -53,6 +53,10 @@ body {
     display: none;
 }
 
+.headerAction {
+    margin-right : 5px;
+}
+
 .hidden {
     display: none;
 }
@@ -64,13 +68,13 @@ body {
 .log {
     display: inline-block;
     height: 100%;
-    width: 80%;
+    width: 100%;
     overflow: auto;
     background-color: black
 }
 
 .sidebar {
-    width: 20%;
+    width: 0%;
     background-color: green;
 }
 
@@ -112,6 +116,11 @@ body {
 	display: inline-block;
 }
 
+.logLine {
+    white-space: pre;
+    font-family: "Andale Mono",monospace;
+}
+
 .error {
 	color: red;
 }
@@ -126,8 +135,4 @@ body {
 
 .debug, .trace {
 	color: white;
-}
-
-.hidden {
-	display: none;
 }

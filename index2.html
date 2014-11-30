@@ -21,14 +21,14 @@
 <body>
     <div id="actionBar" class="header">
     <div class="actionsHeader">
-        <div class="filePickerWrapper">
+        <div class="filePickerWrapper headerAction">
             <input id="logFile" type="file" class="filePicker"/>
             <a href="javascript:void(0)" class="filePickerButton pure-button pure-button-primary" onclick="$('#logFile').click();"><span class="fa fa-file-text"></span></a><div id="pickedFilename"></div>
         </div>
-        <a id="pause" href="javascript:void(0)" class="pure-button pure-button-primary"><span class="playPauseToggle fa fa-pause"></span></a>
-        <a id="clear" href="javascript:void(0)" class="pure-button pure-button-primary"><span class="fa fa-remove"></span></a>
-        <a id="reload" href="javascript:void(0)" class="pure-button pure-button-primary"><span class="fa fa-refresh"></span></a>
-        <select id="All_Filters" multiple></select>
+        <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="playPauseToggle fa fa-pause"></span></a>
+        <a id="clear" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="fa fa-remove"></span></a>
+        <a id="reload" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="fa fa-refresh"></span></a>
+        <select id="All_Filters" class="headerAction" multiple></select>
         <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
     </div>
     <div class="expandCollapse fa fa-angle-double-up"></div>
@@ -36,7 +36,7 @@
 
     <div class="main">
         <div id="content" class="log"></div>
-        <div id="views" class="sidebar"></div>
+        <div id="views" class="sidebar hidden"></div>
     </div>
 
     <script type="text/template" id="lineFilterTemplate">
