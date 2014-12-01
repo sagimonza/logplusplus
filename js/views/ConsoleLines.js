@@ -3,10 +3,6 @@
 Log.Views.ConsoleLinesClass = Backbone.View.extend({
 	el: "#content",
 
-	events: {
-		"click .logFavourite": "toggleFavourite"
-	},
-
 	childView: Log.Views.ConsoleLineClass,
 
 	initialize: function(options) {
@@ -133,8 +129,9 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		var view = $(currentSelection.baseNode).closest(".logLine");
 		var nextFavourite = $("~ .logLine > .fa-star", view).get(0);
 		if (!nextFavourite) {
-			view = $(this.collection.at(0).__view);
-			nextFavourite = $("~ .logLine > .fa-star", view).get(0);
+			var firstModel = this.collection.at(0);
+			view = firstModel && $(firstModel.__view);
+			nextFavourite = view && $("~ .logLine > .fa-star", view).get(0);
 		}
 
 		if (nextFavourite) {

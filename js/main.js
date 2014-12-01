@@ -20,6 +20,9 @@ $(document).ready(function() {
 	$("#reload").on("click", consoleLines.clear.bind(consoleLines));
 	$("#favourite").on("click", consoleLines.showNextFavourite.bind(consoleLines));
 	$(document).keydown(function(e) { if (e.which == 113) consoleLines.showNextFavourite(); });
+	$(document).click(function(e) {
+		if ($(e.target).hasClass("logFavourite")) consoleLines.toggleFavourite(e);
+	});
 });
 
 })();
