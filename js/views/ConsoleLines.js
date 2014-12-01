@@ -6,6 +6,9 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 	childView: Log.Views.ConsoleLineClass,
 
 	initialize: function(options) {
+		this.activeFilterKeys = {};
+		this.modelCollection = [];
+
 		this.dataFeedModel = options.dataFeedModel;
 		this.filtersModel = options.filtersModel;
 
@@ -13,14 +16,13 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		this.listenTo(this.dataFeedModel, "change:paused", this.onPausedToggled);
 		this.listenTo(this.dataFeedModel, "dataAvailable", this.onDataAvailable);
 		this.listenTo(this.filtersModel, "change:activeFilters", this.changeActiveFilters);
-		this.listenTo(this.collection, "change:hidden", this.onHiddenChange);
-		this.listenTo(this.collection, "change:favourite", this.onFavouriteChange);
-		this.listenTo(this.collection, "activeFilterChangedKeys", this.onActiveFilterChangedKeys);
-		this.listenTo(this.collection, "deleted", this.delete);
 	},
 
 	clear: function() {
-		this.collection.reset();
+		this.modelCollection = [];
+		var newEl = $("<div></div>").attr("id", "content").attr("class", "log").get(0);
+		this.el.parentElement.replaceChild(newEl, this.el);
+		this.setElement(newEl);
 	},
 
 	onPausedToggled: function(model, paused) {
@@ -43,42 +45,60 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 	},
 
 	addLines: function(data) {
-		function addLine(line) {
+		function addLine() {
+			var line = newLines[currentIndex++];
 			var model = createLineModel(line, prevLine);
-			model.applyFilters($this.collection.activeFilterKeys);
+			model.applyFilters($this.activeFilterKeys);
 
 			model.__view = createLineView(model);
 			$this.el.appendChild(model.__view.el);
 			prevLine = line;
 
-			models.push(model);
+			$this.modelCollection.push(model);
+			if (currentIndex < newLines.length) {
+				if ((currentIndex % 1000) == 0) _.defer(function() { addLine(); });
+				else addLine();
+			} else {
+				$this.pruneLines();
+				if (scrollIntoView) _.last($this.modelCollection).__view.scrollIntoView();
+			}
 		}
 
-		var $this = this, scrollIntoView = this.isScrolledToBottom(), newLines = [], prevLine, models = [];
-		data.replace(/[^\n]*\n/g, function(line) { addLine(line); });
-		$this.collection.add(models);
+		var $this = this, scrollIntoView = this.isScrolledToBottom(), newLines = [], prevLine;
 
+		data.replace(/[^\n]*\n/g, function(line) { newLines.push(line); });
+		var currentIndex = 0;
+		addLine();
+
+		return;
+
+		data.replace(/[^\n]*\n/g, function(line) { addLine(line); });
 		this.pruneLines();
-		if (scrollIntoView) this.collection.last().__view.scrollIntoView();
+		if (scrollIntoView) _.last(this.modelCollection).__view.scrollIntoView();
 	},
 
 	changeActiveFilters: function(model, activeFilterKeys) {
-		this.collection.changeActiveFilters(activeFilterKeys);
+		var currentActiveFilterKeys = this.activeFilterKeys || {};
+		var changedKeys = activeFilterKeys.filter(function(key) { return !currentActiveFilterKeys[key]; }).
+			concat(Object.keys(currentActiveFilterKeys).filter(function(key) { return currentActiveFilterKeys[key] && activeFilterKeys.indexOf(key) == -1; }));
+
+		changedKeys.forEach(function(key) { currentActiveFilterKeys[key] = activeFilterKeys.indexOf(key) > -1; });
+		this.activeFilterKeys = currentActiveFilterKeys;
+		this.onActiveFilterChangedKeys(changedKeys);
 	},
 
 	onActiveFilterChangedKeys: function(changedKeys) {
 		function buildFilterSelector(key) {
 			return [0, 1, 2, 3].map(function(i) { return "[filter".concat(i, "=", key, "]"); }).join(",");
 		}
-		changedKeys.forEach(function(key) { this._applyFilters(Array.prototype.slice.call($(buildFilterSelector(key)), this.el)); }, this);
+		changedKeys.forEach(function(key) { this._applyFilters(Array.prototype.slice.call($(buildFilterSelector(key), this.el))); }, this);
 	},
 
 	_applyFilters: function(lineElems) {
-		var activeFilters = this.collection.activeFilterKeys;
+		var activeFilters = this.activeFilterKeys;
 		lineElems.forEach(function(lineElem) {
 			var lineModel = lineElem.__model;
-			if (lineModel.filters.every(function(filter) { return !activeFilters[filter]; })) lineModel.set("hidden", true);
-			else lineModel.set("hidden", false);
+			lineModel.hidden = lineModel.filters.every(function(filter) { return !activeFilters[filter]; });
 		});
 	},
 
@@ -86,71 +106,95 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		// todo: listen to line limits changes
 	},
 
-	reset: function() {//each console line removes itself
-		//while (this.el.firstChild)
-		//	this.el.removeChild(this.el.firstChild);
-		//lastIndex = 0;
-	},
-
-	onHiddenChange: function(model, hidden) {
-		if (!model.__view) return;
-
-		if (hidden) {
-			model.__view.hide();
-		} else {
-			model.__view.show();
-		}
-	},
-
-	delete: function(lineModel) {
-		lineModel.__view.el.remove();
-	},
-
 	isScrolledToBottom: function() {
-		var lastLineModel = this.collection.last();
+		var lastLineModel = _.last(this.modelCollection);
 		if (!lastLineModel  || !lastLineModel.__view) return true;
 
 		var lastLineHeight = lastLineModel.__view.getHeight();
 		return this.el.scrollTop + this.el.clientHeight >= this.el.scrollHeight - (lastLineHeight / 2);
 	},
 
-	toggleFavourite: function(e) {
+	toggleFavorite: function(e) {
 		var model = e.target.parentElement.__model;
-		model.set("favourite", !model.get("favourite"));
+		model.favorite = !model.favorite;
 	},
 
-	onFavouriteChange: function(model) {
-		$(".logFavourite", model.__view).toggleClass("fa-star-o");
-		$(".logFavourite", model.__view).toggleClass("fa-star");
-	},
-
-	showNextFavourite: function() {
+	showNextFavorite: function() {
 		var currentSelection = window.getSelection();
 		var view = $(currentSelection.baseNode).closest(".logLine");
-		var nextFavourite = $("~ .logLine > .fa-star", view).get(0);
-		if (!nextFavourite) {
-			var firstModel = this.collection.at(0);
+		var nextFavorite = $("~ .logLine:not(.hidden) > .fa-star", view).get(0);
+		if (!nextFavorite) {
+			var firstModel = this.modelCollection[0];
 			view = firstModel && $(firstModel.__view);
-			nextFavourite = view && $("~ .logLine > .fa-star", view).get(0);
+			nextFavorite = view && $("~ .logLine > .fa-star", view).get(0);
 		}
 
-		if (nextFavourite) {
-			nextFavourite.parentElement.scrollIntoView(false);
+		if (nextFavorite) {
+			nextFavorite.parentElement.scrollIntoView(false);
 			var range = document.createRange();
-			range.selectNode(nextFavourite.parentElement);
+			range.selectNode(nextFavorite.parentElement);
 			currentSelection.removeAllRanges();
 			currentSelection.addRange(range);
 		}
 	}
 });
 
+function LineModel(line, prevLine) {
+	this.text = line;
+	this._favorite = false;
+	LineParsers.parse(this);
+
+	if (!LineTypes[this.type]) {
+		var lastLineModel = prevLine;
+		this.type = (lastLineModel && lastLineModel.type) || "default";
+		this.severity = this.severity || (lastLineModel && lastLineModel.severity) || "info";
+	}
+}
+
+LineModel.prototype = {
+	applyFilters: function(activeFilters) {
+		var modelFilters = this.filters = LineFilters.getFilterKeys(this), modelFiltersLen = modelFilters.length;
+		var visibleModel;
+
+		for (var i = 0; !visibleModel && i < modelFiltersLen; ++i) {
+			if (activeFilters[modelFilters[i]]) {
+				visibleModel = true;
+			}
+		}
+
+		this.hidden = !visibleModel;
+	},
+
+	set hidden(val) {
+		if (this._hidden != !!val) {
+			this._hidden = !!val;
+			if (this.__view) this.__view.onHiddenChange(this._hidden);
+		}
+	},
+
+	get hidden() {
+		return this._hidden;
+	},
+
+	set favorite(val) {
+		if (this._favorite != !!val) {
+			this._favorite = !!val;
+			this.__view.onFavoriteChange(this._favorite);
+		}
+	},
+
+	get favorite() {
+		return !!this._favorite;
+	}
+};
+
 function createLineModel(line, prevLine) {
-	return new Log.Models.ConsoleLineClass({ raw: line, prevLine: line });
+	return new LineModel(line, prevLine);
 }
 
 function createLineView(lineModel) {
 	var view = document.createElement("div");
-	var hidden = lineModel.get("hidden") ? "hidden" : "";
+	var hidden = lineModel.hidden ? "hidden" : "";
 	view.setAttribute("type", lineModel.type);
 	view.setAttribute("severity", lineModel.severity);
 	view.setAttribute("class", "logLine ".concat(lineModel.severity, " ", hidden));
@@ -159,7 +203,7 @@ function createLineView(lineModel) {
 	for (var i = 0; i < filterLen; ++i) view.setAttribute("filter" + i, filters[i]);
 
 	var fav = document.createElement("span");
-	fav.setAttribute("class", "logFavourite fa fa-star-o");
+	fav.setAttribute("class", "logFavorite fa fa-star-o");
 	view.appendChild(fav);
 
 	if (lineModel.message) {
@@ -181,9 +225,18 @@ function createLineView(lineModel) {
 
 	view.el = view;
 	view.render = function() { return this; };
-	view.hide = function() { $(this).addClass("hidden"); };
-	view.show = function() { $(this).removeClass("hidden"); };
+	view.hide = function() { this.classList.add("hidden"); };
+	view.show = function() { this.classList.remove("hidden"); };
 	view.getHeight = function() { return $(this).height(); };
+	view.onFavoriteChange = function() {
+		$(".logFavorite", this).toggleClass("fa-star-o");
+		$(".logFavorite", this).toggleClass("fa-star");
+	};
+	view.onHiddenChange = function(newHidden) {
+		if (newHidden) this.hide();
+		else this.show();
+	};
+
 
 	view.__model = lineModel;
 

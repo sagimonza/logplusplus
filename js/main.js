@@ -18,10 +18,10 @@ $(document).ready(function() {
 
 	$("#clear").on("click", consoleLines.clear.bind(consoleLines));
 	$("#reload").on("click", consoleLines.clear.bind(consoleLines));
-	$("#favourite").on("click", consoleLines.showNextFavourite.bind(consoleLines));
-	$(document).keydown(function(e) { if (e.which == 113) consoleLines.showNextFavourite(); });
+	$("#favorite").on("click", consoleLines.showNextFavorite.bind(consoleLines));
+	$(document).keydown(function(e) { if (e.which == 113) consoleLines.showNextFavorite(); });
 	$(document).click(function(e) {
-		if ($(e.target).hasClass("logFavourite")) consoleLines.toggleFavourite(e);
+		if ($(e.target).hasClass("logFavorite")) consoleLines.toggleFavorite(e);
 	});
 });
 

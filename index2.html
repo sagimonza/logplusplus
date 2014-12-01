@@ -23,13 +23,13 @@
     <div class="actionsHeader">
         <div class="filePickerWrapper headerAction">
             <input id="logFile" type="file" class="filePicker"/>
-            <a href="javascript:void(0)" class="filePickerButton pure-button pure-button-primary" onclick="$('#logFile').click();"><span class="fa fa-file-text"></span></a><div id="pickedFilename"></div>
+            <a href="javascript:void(0)" class="filePickerButton pure-button pure-button-primary" onclick="$('#logFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedFilename"></div>
         </div>
-        <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="playPauseToggle fa fa-pause"></span></a>
-        <a id="clear" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="fa fa-remove"></span></a>
-        <a id="reload" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="fa fa-refresh"></span></a>
+        <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
+        <a id="clear" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (not delete)"><span class="fa fa-remove"></span></a>
+        <a id="reload" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Reload file"><span class="fa fa-refresh"></span></a>
         <select id="All_Filters" class="headerAction" multiple></select>
-        <a id="favourite" href="javascript:void(0)" class="headerAction pure-button pure-button-primary"><span class="fa fa-star"></span></a>
+        <a id="favorite" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
         <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
     </div>
     <div class="expandCollapse fa fa-angle-double-up"></div>
