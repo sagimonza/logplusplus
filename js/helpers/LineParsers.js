@@ -9,7 +9,7 @@ window.LineParsers = {
 
 	replay: [
 		{ name: "mcActions", regexp: /- received msg: |- doing event: /, attrs: [["mcActions", "true"]] },
-		{ name: "responses", regexp: /- sending message to mobile /, attrs: [["responses", "true"]] }
+		{ name: "responses", regexp: /(.*- sending message to mobile )({.*})/, attrs: [["responses", "true"], ["message", [["text", 1], ["json", 2]]]] }
 	]
 };
 
@@ -21,7 +21,11 @@ LineParsers.parse = function(line) {
 		for (var j = 0; j < categoryParsersLen; ++j) {
 			var res = categoryParsers[j].regexp.exec(line.text);
 			if (res) {
-				categoryParsers[j].attrs.forEach(function(attr) { line[attr[0]] = attr[1].toFixed ? res[attr[1]].trim().toLowerCase() : attr[1]; });
+				categoryParsers[j].attrs.forEach(function(attr) {
+					line[attr[0]] = attr[1].toFixed ? res[attr[1]].trim().toLowerCase() :
+						attr[1].reduce ? attr[1].map(function(pair) { return pair.map(function(prop) {
+							return prop.toFixed ? res[prop] : prop; }); }) : attr[1];
+				});
 				break;
 			}
 		}

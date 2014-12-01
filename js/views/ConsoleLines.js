@@ -3,6 +3,10 @@
 Log.Views.ConsoleLinesClass = Backbone.View.extend({
 	el: "#content",
 
+	events: {
+		"click .logFavourite": "toggleFavourite"
+	},
+
 	childView: Log.Views.ConsoleLineClass,
 
 	initialize: function(options) {
@@ -14,6 +18,7 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		this.listenTo(this.dataFeedModel, "dataAvailable", this.onDataAvailable);
 		this.listenTo(this.filtersModel, "change:activeFilters", this.changeActiveFilters);
 		this.listenTo(this.collection, "change:hidden", this.onHiddenChange);
+		this.listenTo(this.collection, "change:favourite", this.onFavouriteChange);
 		this.listenTo(this.collection, "activeFilterChangedKeys", this.onActiveFilterChangedKeys);
 		this.listenTo(this.collection, "deleted", this.delete);
 	},
@@ -111,6 +116,34 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		var lastLineHeight = lastLineModel.__view.getHeight();
 		return this.el.scrollTop + this.el.clientHeight >= this.el.scrollHeight - (lastLineHeight / 2);
+	},
+
+	toggleFavourite: function(e) {
+		var model = e.target.parentElement.__model;
+		model.set("favourite", !model.get("favourite"));
+	},
+
+	onFavouriteChange: function(model) {
+		$(".logFavourite", model.__view).toggleClass("fa-star-o");
+		$(".logFavourite", model.__view).toggleClass("fa-star");
+	},
+
+	showNextFavourite: function() {
+		var currentSelection = window.getSelection();
+		var view = $(currentSelection.baseNode).closest(".logLine");
+		var nextFavourite = $("~ .logLine > .fa-star", view).get(0);
+		if (!nextFavourite) {
+			view = $(this.collection.at(0).__view);
+			nextFavourite = $("~ .logLine > .fa-star", view).get(0);
+		}
+
+		if (nextFavourite) {
+			nextFavourite.parentElement.scrollIntoView(false);
+			var range = document.createRange();
+			range.selectNode(nextFavourite.parentElement);
+			currentSelection.removeAllRanges();
+			currentSelection.addRange(range);
+		}
 	}
 });
 
@@ -128,7 +161,27 @@ function createLineView(lineModel) {
 	var filters = lineModel.filters, filterLen = filters.length;
 	for (var i = 0; i < filterLen; ++i) view.setAttribute("filter" + i, filters[i]);
 
-	view.textContent = lineModel.text;
+	var fav = document.createElement("span");
+	fav.setAttribute("class", "logFavourite fa fa-star-o");
+	view.appendChild(fav);
+
+	if (lineModel.message) {
+		var message = lineModel.message, messageLen = message.length;
+		for (var  j = 0; j < messageLen; ++j) {
+			switch (message[j][0]) {
+				case "json":
+					var jsonElem = document.createElement("a");
+					jsonElem.classList.add("logJSON");
+					jsonElem.textContent = message[j][1];
+					view.appendChild(jsonElem);
+					break;
+				case "text": // fall through
+				default:
+					view.appendChild(document.createTextNode(message[j][1]));
+			}
+		}
+	} else view.appendChild(document.createTextNode(lineModel.text));
+
 	view.el = view;
 	view.render = function() { return this; };
 	view.hide = function() { $(this).addClass("hidden"); };

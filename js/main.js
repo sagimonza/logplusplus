@@ -18,6 +18,8 @@ $(document).ready(function() {
 
 	$("#clear").on("click", consoleLines.clear.bind(consoleLines));
 	$("#reload").on("click", consoleLines.clear.bind(consoleLines));
+	$("#favourite").on("click", consoleLines.showNextFavourite.bind(consoleLines));
+	$(document).keydown(function(e) { if (e.which == 113) consoleLines.showNextFavourite(); });
 });
 
 })();

@@ -117,8 +117,27 @@ body {
 }
 
 .logLine {
+    cursor: default;
     white-space: pre;
     font-family: "Andale Mono",monospace;
+}
+
+.logLine:hover {
+    background-color: darkslategray;
+}
+
+.logFavourite {
+    cursor: pointer;
+    margin-right: 3px;
+}
+
+.logJSON {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.logJSON:hover {
+    font-weight: bold;
 }
 
 .error {
