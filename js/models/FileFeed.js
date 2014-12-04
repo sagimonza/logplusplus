@@ -15,7 +15,7 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 		// todo: user buffer to remember this lost packet
 		if (this.get("paused")) return;
 
-		this.trigger("dataAvailable", this._fr.result);
+		this.trigger("dataAvailable", this, this._fr.result);
 	},
 
 	onPausedChanged: function() {

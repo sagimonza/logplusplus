@@ -1,10 +1,10 @@
 ;(function() {
 
 Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
-	el: ".filePickerWrapper",
+	el: "#logFile",
 
 	events: {
-		"change #logFile": "onFileChanged"
+		"change": "onFileChanged"
 	},
 
 	initialize: function() {
@@ -33,9 +33,15 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 	},
 
 	onFileChanged: function(e) {
+		if (this.ignoreChange) return;
+
 		this.model.reset(0);
+		this.model.set({ feed: null });
 		this.model.set({ feed: e.target.files.item(0) });
 		this.model.nextChunk();
+		this.ignoreChange = true;
+		$("#logFile").val("");
+		this.ignoreChange = false;
 	}
 });
 
