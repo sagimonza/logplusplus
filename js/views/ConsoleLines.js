@@ -1,7 +1,7 @@
 ;(function() {
 
 Log.Views.ConsoleLinesClass = Backbone.View.extend({
-	el: "#content",
+	el: "#console",
 
 	initialize: function(options) {
 		this.activeFilterKeys = {};
@@ -12,15 +12,25 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		this.dataFeedModels.forEach(function(dataFeedModel) {
 			this.listenTo(dataFeedModel, "change:feed", this.clear);
+			this.listenTo(dataFeedModel, "reset", this.clear);
 			this.listenTo(dataFeedModel, "change:paused", this.onPausedToggled);
 			this.listenTo(dataFeedModel, "dataAvailable", this.onDataAvailable);
 		}, this);
 		this.listenTo(this.filtersModel, "change:activeFilters", this.changeActiveFilters);
+
+		$("#clearConsole").on("click", this.clear.bind(this));
+		$("#favorite").on("click", this.showNextFavorite.bind(this));
+
+		var $this = this;
+		$(document).keydown(function(e) { if (e.which == 113) $this.showNextFavorite(); });
+		$(document).click(function(e) {
+			if ($(e.target).hasClass("logFavorite")) $this.toggleFavorite(e);
+		});
 	},
 
 	clear: function() {
 		this.modelCollection = [];
-		var newEl = $("<div></div>").attr("id", "content").attr("class", "log").get(0);
+		var newEl = $("<div></div>").attr("id", this.$el.attr("id")).attr("class", this.$el.attr("class")).get(0);
 		this.el.parentElement.replaceChild(newEl, this.el);
 		this.setElement(newEl);
 	},

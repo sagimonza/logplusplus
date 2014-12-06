@@ -44,8 +44,8 @@ function resume() {
 }
 
 function clear() {
-	while (contentElem.firstChild) {
-		contentElem.removeChild(contentElem.firstChild);
+	while (consoleElem.firstChild) {
+		consoleElem.removeChild(consoleElem.firstChild);
 	}
 	lastIndex = 0;
 }
@@ -89,8 +89,8 @@ function addLine(text) {
 		}
 	});
 
-	if (!lineParsed && contentElem.lastChild) {
-		var lastLine = contentElem.lastChild;
+	if (!lineParsed && consoleElem.lastChild) {
+		var lastLine = consoleElem.lastChild;
 		type = lastLine.getAttribute("type");
 		severity = lastLine.getAttribute("severity");
 	}
@@ -109,31 +109,31 @@ function addLine(text) {
 
 	if (checkFilter(filters)) lineDiv.classList.add("hidden");
 
-	contentElem.appendChild(lineDiv);
+	consoleElem.appendChild(lineDiv);
 }
 
 function pruneLines() {
-	var lines = contentElem.getElementsByClassName("logLine"), limitVal = Number(linesLimit.value);
+	var lines = consoleElem.getElementsByClassName("logLine"), limitVal = Number(linesLimit.value);
 	for (var i = 0; (lines.length - i) > limitVal; ++i) {
 		lines[i].remove();
 	}
 }
 
 function onNewDataAvail(res) {
-	var lastLine = contentElem.lastChild, scrollIntoView = isScrolledToBottom(lastLine);
+	var lastLine = consoleElem.lastChild, scrollIntoView = isScrolledToBottom(lastLine);
 	var ts = Date.now();
 	res.replace(/[^\n]*\n/g, function(line) { addLine(line); });
 	console.log("total time:" + (Date.now() - ts));
 	pruneLines();
-	if (contentElem.lastChild && scrollIntoView) contentElem.lastChild.scrollIntoView();
+	if (consoleElem.lastChild && scrollIntoView) consoleElem.lastChild.scrollIntoView();
 }
 
 function isScrolledToBottom(lastLine) {
 	var lastNodeHeight = lastLine ? lastLine.clientHeight : 0;
-	return contentElem.scrollTop + contentElem.clientHeight >= contentElem.scrollHeight - lastNodeHeight / 2;
+	return consoleElem.scrollTop + consoleElem.clientHeight >= consoleElem.scrollHeight - lastNodeHeight / 2;
 }
 
-var contentElem = document.getElementById("content");
+var consoleElem = document.getElementById("console");
 
 var refreshIntervalId;
 
@@ -148,7 +148,7 @@ document.getElementById("logFile").addEventListener("change", function(e) {
 	logFile = this.files.item(0);
 	var filename = (logFile && logFile.name) || "";
 	document.title = filename;
-	$("#pickedFilename").text(filename).attr("title", filename);
+	$("#pickedLogFilename").text(filename).attr("title", filename);
 	resume();
 });
 
@@ -180,7 +180,7 @@ function setSeverityFilters(filterKeys) {
 	changedKeys.forEach(function(key) { logFilterKeys[key] = filterKeys.indexOf(key) > -1; });
 
 	changedKeys.forEach(function(key) {
-		Array.prototype.slice.call(contentElem.querySelectorAll(buildFilterSelector(key))).forEach(function(line) {
+		Array.prototype.slice.call(consoleElem.querySelectorAll(buildFilterSelector(key))).forEach(function(line) {
 			if (checkFilter(extractFilterAttrs(line))) line.classList.add("hidden");
 			else line.classList.remove("hidden");
 		});

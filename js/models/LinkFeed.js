@@ -5,7 +5,7 @@ Log.Models.LinkFeedClass = Log.Models.DataFeedClass.extend({
 		function extractFeedFromZip(zipData) {
 			var zipObj = new JSZip(zipData);
 			return Object.keys(zipObj.files).some(function(filename) {
-				if (/.log$/.test(filename)) {
+				if ($this.filterRegexp.test(filename)) {
 					$this.onDataAvailable(zipObj.file(filename).asText());
 					return true;
 				} else if (/.zip$/.test(filename)) {

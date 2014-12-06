@@ -1,15 +1,13 @@
 ;(function() {
 
 Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
-	el: "#logFile",
-
 	events: {
 		"change": "onFileChanged"
 	},
 
-	initialize: function() {
+	initialize: function(options) {
+		this.options = options;
 		this.listenTo(this.model, "change:feed", this.render);
-		$("#reload").click(this.reload.bind(this));
 		Log.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
 
@@ -17,7 +15,7 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 		var file = this.model.get("feed");
 		var filename = (file && file.name) || "";
 		document.title = filename;
-		$("#pickedFilename").text(filename);
+		this.options.$pickedLogFilename.text(filename);
 	},
 
 	pause: function() {
@@ -30,17 +28,19 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 
 	reload: function() {
 		this.model.reset(0);
+		this.model.onDataAvailable();
 	},
 
 	onFileChanged: function(e) {
 		if (this.ignoreChange) return;
 
+		this.options.$reloadView.prop("activeFeedView", this);
 		this.model.reset(0);
 		this.model.set({ feed: null });
 		this.model.set({ feed: e.target.files.item(0) });
 		this.model.nextChunk();
 		this.ignoreChange = true;
-		$("#logFile").val("");
+		this.$el.val("");
 		this.ignoreChange = false;
 	}
 });

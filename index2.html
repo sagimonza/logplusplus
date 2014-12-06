@@ -5,6 +5,7 @@
     <link href="css/lib/pure-min.css" rel="stylesheet">
     <link href="css/lib/multiple-select.css" rel="stylesheet">
     <link href="css/lib/magnific-popup.css" rel="stylesheet">
+    <link href="css/lib/jquery.sidr.light.css" rel="stylesheet">
 
     <link href="css/log5.css" rel="stylesheet">
 
@@ -13,33 +14,71 @@
     <script src="js/lib/backbone-min.js"></script>
     <script src="js/lib/backbone.babysitter.js"></script>
 
+    <script src="js/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/lib/jszip.min.js"></script>
+
     <script src="js/lib/jquery.multiple.select.js"></script>
     <script src="js/lib/jquery.magnific-popup.min.js"></script>
+    <script src="js/lib/jquery.sidr.min.js"></script>
 
 </head>
 
 <body>
-    <div id="actionBar" class="header">
-    <div class="actionsHeader">
-        <div class="feedPickerWrapper headerAction">
-            <input id="logFile" type="file" class="filePicker"/>
-            <input id="logLink" type="text" class="linkPicker"/>
-            <a id="linkOpener" href="#urlPopup" class="feedPickerButton pure-button pure-button-primary" title="Open file..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#logFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedFilename"></div>
+    <div class="main" active="console-view">
+        <div id="console-view">
+            <div id="consoleActionBar" class="header">
+                <div class="actionsHeader">
+                    <a id="console-menu-sidebar-opener" class="headerAction pure-button menu-sidebar-opener" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
+                    <div class="feedPickerWrapper headerAction">
+                        <input id="logFile" type="file" class="filePicker"/>
+                        <input id="logLink" type="text" class="linkPicker"/>
+                        <a id="consoleLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#logFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedLogFilename" class="filename"></div>
+                    </div>
+                    <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
+                    <a id="clearConsole" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (not delete)"><span class="fa fa-remove"></span></a>
+                    <a id="reloadConsole" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file"><span class="fa fa-refresh"></span></a>
+                    <select id="All_Filters" class="headerAction" multiple></select>
+                    <a id="favorite" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
+                    <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
+                </div>
+            </div>
+            <div id="console" class="mainContent console-log"></div>
         </div>
-        <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
-        <a id="clear" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (not delete)"><span class="fa fa-remove"></span></a>
-        <a id="reload" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Reload file"><span class="fa fa-refresh"></span></a>
-        <select id="All_Filters" class="headerAction" multiple></select>
-        <a id="favorite" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
-        <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
-    </div>
-    <div class="expandCollapse fa fa-angle-double-up"></div>
+        <div id="xml-view">
+            <div id="xmlActionBar" class="header">
+                <div class="actionsHeader">
+                    <a id="xml-menu-sidebar-opener" class="headerAction pure-button" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
+                    <div class="feedPickerWrapper headerAction">
+                        <input id="xmlFile" type="file" class="filePicker"/>
+                        <input id="xmlLink" type="text" class="linkPicker"/>
+                        <a id="xmlLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#xmlFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedXMLFilename" class="filename"></div>
+                    </div>
+                    <a id="clearEditor" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (not delete)"><span class="fa fa-remove"></span></a>
+                    <a id="reloadEditor" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file"><span class="fa fa-refresh"></span></a>
+                </div>
+            </div>
+            <div id="xml" class="mainContent"></div>
+        </div>
+        <div id="json-view">
+            <div id="json" class="mainContent"></div>
+        </div>
+        <div id="gallery-view">
+            <div id="gallery" class="mainContent"></div>
+        </div>
+        <div id="emulator-view">
+            <div id="emulator" class="mainContent"></div>
+        </div>
     </div>
 
-    <div class="main">
-        <div id="content" class="log"></div>
-        <div id="views" class="sidebar hidden"></div>
+    <div id="menu-sidebar">
+        <ul>
+            <li class="sidebar-menu-item active" data-content-id="console-view"><a href="#">Console</a></li>
+            <li class="sidebar-menu-item" data-content-id="xml-view"><a href="#">XML</a></li>
+            <li class="sidebar-menu-item" data-content-id="json-view"><a href="#">JSON Viewer</a></li>
+            <li class="sidebar-menu-item" data-content-id="gallery-view"><a href="#">Gallery</a></li>
+            <li class="sidebar-menu-item" data-content-id="emulator-view"><a href="#">Emulator</a></li>
+            <li id="globalFeedback"><a id="feedbackLinkOpener" href="#urlPopup">Open Feedback...</a></li>
+        </ul>
     </div>
 
     <div id="urlPopup" class="white-popup mfp-hide">
@@ -49,6 +88,8 @@
             </fieldset>
         </form>
     </div>
+
+    <div id="shield" class="hidden"></div>
 
     <script type="text/template" id="lineFilterTemplate">
         <% _.each(args.categories, function(category) { %>
@@ -83,11 +124,14 @@
     <script src="js/models/LineFilter.js"></script>
     <script src="js/views/LineFilter.js"></script>
 
+    <script src="js/views/MenuSidebar.js"></script>
+
     <script src="js/models/ConsoleLine.js"></script>
     <script src="js/views/ConsoleLine.js"></script>
     <script src="js/collections/ConsoleLines.js"></script>
     <script src="js/views/ConsoleLines.js"></script>
 
+    <script src="js/views/Editor.js"></script>
 </body>
 
 </html>

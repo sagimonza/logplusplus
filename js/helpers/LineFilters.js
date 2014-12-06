@@ -4,7 +4,7 @@ var LineFilterRules = [
 	{	desc: "mcActions",
 		categories: ["custom"],
 		names: ["mcActions"],
-		filter: function(line) { return line.mcActions && createFilterKey("custom", "mcAactions"); }
+		filter: function(line) { return line.mcActions && createFilterKey("custom", "mcActions"); }
 	},
 	{	desc: "responses",
 		categories: ["custom"],

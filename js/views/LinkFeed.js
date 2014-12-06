@@ -1,29 +1,33 @@
 ;(function() {
 
 Log.Views.LinkFeedClass = Log.Views.DataFeedClass.extend({
-	el: "#logLink",
-
-	initialize: function() {
+	initialize: function(options) {
 		var $this = this;
+		this.options = options;
 		this.listenTo(this.model, "change:url", this.render);
-		$("#reload").click(this.reload.bind(this));
-		$("#linkOpener").magnificPopup({
+		this.options.$linkOpenerView.magnificPopup({
 			type: "inline",
 			callbacks : {
-				open: function() { setTimeout(function() { $(".urlInput").focus(); }, 100); }
+				open: function() {
+					setTimeout(function() { $(".urlInput").focus(); }, 100);
+					$("#urlSubmitForm").submit(function(e) { return $this.onUrlSubmit(e); });
+				},
+
+				close: function() {
+					$("#urlSubmitForm").off();
+				}
 			},
 			midClick: true
 		});
-		$("#urlSubmitForm").submit(function(e) { return $this.onUrlSubmit(e); });
-		$("#logLink").change(function(e) { return $this.onLinkChanged(e); });
+		if (!this.options.$delegateViews) this.$el.change(function(e) { return $this.onLinkChanged(e); });
+		this.model.filterRegexp = this.options.filterRegexp;
 		Log.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
 
 	render: function() {
-		console.log("render");
 		var url = this.model.get("url");
 		document.title = url;
-		$("#pickedFilename").text(url);
+		this.options.$pickedLogFilename && this.options.$pickedLogFilename.text(url);
 	},
 
 	reload: function() {
@@ -33,14 +37,16 @@ Log.Views.LinkFeedClass = Log.Views.DataFeedClass.extend({
 
 	onUrlSubmit: function(e) {
 		e.preventDefault();
-		$("#logLink").val($(".urlInput").val()).change();
-		console.log("url submitted");
+		if (!this.options.$delegateViews)
+			this.$el.val($(".urlInput").val()).change();
+		else
+			this.options.$delegateViews.forEach(function($delegateView) { $delegateView.val($(".urlInput").val()).change(); });
 		$.magnificPopup.close();
 		return false;
 	},
 
 	onLinkChanged: function(e) {
-		console.log("on link changed");
+		this.options.$reloadView && this.options.$reloadView.prop("activeFeedView", this);
 		this.model.reset();
 		this.model.changeLink(e.target.value);
 	}
