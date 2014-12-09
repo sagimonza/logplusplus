@@ -2,8 +2,8 @@
     - zapp xml, scroll into view of webcontrol/context/etc.
     - iframe for mobile preview
     - web control data (mc, ctx, page, parent, template, etc.)
-    - json viewer - https://github.com/josdejong/jsoneditor/
-    - gallery of images (snapshot)
+    [DONE]- json viewer - https://github.com/josdejong/jsoneditor/
+    [DONE]- gallery of images (snapshot)
 - extensible action bar for all sorts of actions (dockable & collapsable)
     - multi filter (info/debug/etc. default/replay/context/etc.)
     - multi search (Assaf's)
@@ -21,5 +21,5 @@
     - mouseover on wc/ctx show its data or rendered mobile data
     - click JSON objects to show them on the right pane
 - line numbers (on/off)
-- from line filter
+- "from line" filter
 - opposite sort (from the end to start)
