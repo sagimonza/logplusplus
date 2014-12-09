@@ -22,7 +22,7 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		$("#favorite").on("click", this.showNextFavorite.bind(this));
 
 		var $this = this;
-		$(document).keydown(function(e) { if (e.which == 113) $this.showNextFavorite(); });
+		$(document).keydown(function(e) { if (!e.altKey && e.which == 113) $this.showNextFavorite(); });
 		$(document).click(function(e) {
 			if ($(e.target).hasClass("logFavorite")) $this.toggleFavorite(e);
 		});

@@ -68,10 +68,16 @@ $(document).ready(function() {
 			case 50: menuSidebarView.setActive("xml-view");	break;
 			case 51: menuSidebarView.setActive("json-view"); break;
 			case 52: menuSidebarView.setActive("gallery-view"); break;
+			case 113:
+				var innerHovered = $("div:hover").last();
+				var $favorite = $(".logFavorite", innerHovered.get(0));
+				if ($favorite.length == 1) $favorite.click();
+				break;
 			default: return;
 		}
 
 		e.preventDefault();
+		e.stopImmediatePropagation();
 	});
 
 	$(document).keydown(function(e) {
