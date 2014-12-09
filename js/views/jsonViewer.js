@@ -4,7 +4,7 @@ Log.Views.jsonViewerClass = Backbone.View.extend({
 	el: "#json",
 
 	initialize: function(options) {
-		this.editor = new JSONEditor(this.el, { mode: "view", modes: ["view", "form"] });
+		this.editor = new JSONEditor(this.el, { mode: "view", modes: ["view", "form", "code"] });
 
 		this.dataFeedModels = options.dataFeedModels;
 		this.dataFeedModels.forEach(function(dataFeedModel) {

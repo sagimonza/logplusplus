@@ -4,6 +4,9 @@
     - web control data (mc, ctx, page, parent, template, etc.)
     [DONE]- json viewer - https://github.com/josdejong/jsoneditor/
     [DONE]- gallery of images (snapshot)
+- remember user preferences on localStorage - filters, config, etc.
+- support URL params: link, config, filters
+- color pallette
 - extensible action bar for all sorts of actions (dockable & collapsable)
     - multi filter (info/debug/etc. default/replay/context/etc.)
     - multi search (Assaf's)
