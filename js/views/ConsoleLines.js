@@ -55,6 +55,19 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 	},
 
 	addLines: function(data) {
+		function getLastVisibleLine(modelCollection) {
+			for (var i = modelCollection.length - 1; i >= 0; --i) {
+				if (!modelCollection[i].hidden) return modelCollection[i];
+			}
+		}
+
+		function isScrolledToBottom(container, lastVisibleLine) {
+			if (!lastVisibleLine  || !lastVisibleLine.__view) return true;
+
+			var lastLineHeight = lastVisibleLine.__view.getHeight();
+			return container.scrollTop + container.clientHeight >= container.scrollHeight - lastLineHeight;
+		}
+
 		function addLine() {
 			var line = newLines[currentIndex++];
 			prevLineModel = new ConsoleLineModel(line, prevLineModel);
@@ -69,11 +82,14 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 				else addLine();
 			} else {
 				$this.pruneLines();
-				if (scrollIntoView) _.last($this.modelCollection).__view.scrollIntoView();
+				if (scrollIntoView) {
+					var lastVisibleLine = getLastVisibleLine($this.modelCollection);
+					if (lastVisibleLine) lastVisibleLine.__view.scrollIntoView();
+				}
 			}
 		}
 
-		var $this = this, scrollIntoView = this.isScrolledToBottom(), newLines = [], prevLineModel;
+		var $this = this, lastVisibleLine = getLastVisibleLine(this.modelCollection), scrollIntoView = isScrolledToBottom(this.el, lastVisibleLine), newLines = [], prevLineModel;
 
 		data.replace(/[^\n]*\n/g, function(line) { newLines.push(line); });
 		var currentIndex = 0;
@@ -107,14 +123,6 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 
 	pruneLines: function() {
 		// todo: listen to line limits changes
-	},
-
-	isScrolledToBottom: function() {
-		var lastLineModel = _.last(this.modelCollection);
-		if (!lastLineModel  || !lastLineModel.__view) return true;
-
-		var lastLineHeight = lastLineModel.__view.getHeight();
-		return this.el.scrollTop + this.el.clientHeight >= this.el.scrollHeight - (lastLineHeight / 2);
 	},
 
 	toggleFavorite: function(e) {
