@@ -8,8 +8,12 @@ window.LineParsers = {
 	],
 
 	replay: [
-		{ name: "mcActions", regexp: /- received msg: |- doing event: /, attrs: [["mcActions", "true"]] },
+		{ name: "mcActions", regexp: /(.*- received msg: |.*- doing event: )({.*})/, attrs: [["mcActions", "true"], ["message", [["text", 1], ["json", 2]]]] },
 		{ name: "responses", regexp: /(.*- sending message to mobile )({.*})/, attrs: [["responses", "true"], ["message", [["text", 1], ["json", 2]]]] }
+	],
+
+	debug: [
+		{ name: "remediation", regexp: /({"bestFlowProb":.*)/, attrs: [["remediation", "true"], ["message", [["json", 1]]]] }
 	]
 };
 

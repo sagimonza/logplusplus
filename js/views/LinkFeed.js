@@ -27,7 +27,7 @@ Log.Views.LinkFeedClass = Log.Views.DataFeedClass.extend({
 	render: function() {
 		var url = this.model.get("url");
 		document.title = url;
-		this.options.$pickedLogFilename && this.options.$pickedLogFilename.text(url);
+		this.options.$pickedFilename && this.options.$pickedFilename.text(url);
 	},
 
 	reload: function() {

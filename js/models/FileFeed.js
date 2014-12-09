@@ -5,7 +5,8 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 		paused: false
 	},
 
-	initialize: function() {
+	initialize: function(options) {
+		this.isDataURL = options.isDataURL;
 		this._fr = new FileReader();
 		this._fr.onloadend = this.onDataAvailable.bind(this);
 		Log.Models.DataFeedClass.prototype.initialize.apply(this, arguments);
@@ -35,7 +36,9 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 
 		if (file.size < this.get("lastIndex")) this.reset(0);
 
-		this._fr.readAsText(file.slice(this.get("lastIndex")));
+		if (this._fr.readyState == 1) return;
+
+		this._fr[!this.isDataURL ? "readAsText" : "readAsDataURL"](file.slice(this.get("lastIndex")));
 		this.set("lastIndex", file.size);
 	}
 });

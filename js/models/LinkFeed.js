@@ -1,12 +1,17 @@
 ;(function() {
 
 Log.Models.LinkFeedClass = Log.Models.DataFeedClass.extend({
+	initialize: function(options) {
+		this.isDataURL = options.isDataURL;
+	},
+
 	changeLink: function(url) {
 		function extractFeedFromZip(zipData) {
 			var zipObj = new JSZip(zipData);
 			return Object.keys(zipObj.files).some(function(filename) {
 				if ($this.filterRegexp.test(filename)) {
-					$this.onDataAvailable(zipObj.file(filename).asText());
+					var data = !$this.isDataURL ? zipObj.file(filename).asText() : btoa(String.fromCharCode.apply(null, zipObj.file(filename).asUint8Array()));
+					$this.onDataAvailable(data);
 					return true;
 				} else if (/.zip$/.test(filename)) {
 					return extractFeedFromZip(zipObj.file(filename).asArrayBuffer());

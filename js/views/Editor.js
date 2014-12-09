@@ -5,7 +5,7 @@ Log.Views.EditorClass = Backbone.View.extend({
 		this.editor = ace.edit("xml");
 		this.editor.setTheme("ace/theme/monokai");
 		this.editor.getSession().setMode("ace/mode/xml");
-		//this.editor.setReadOnly(true);
+		this.editor.setReadOnly(true);
 		this.editor.setPrintMarginColumn(1000);
 
 		this.dataFeedModels = options.dataFeedModels;
@@ -15,10 +15,19 @@ Log.Views.EditorClass = Backbone.View.extend({
 		}, this);
 
 		$("#clearEditor").on("click", this.clear.bind(this));
+		$("#readonlyEditor").click(this.toggleEditing.bind(this));
 	},
 
 	clear: function() {
 		this.editor.setValue("");
+	},
+
+	toggleEditing: function() {
+		this.editor.setReadOnly(!this.editor.getReadOnly());
+
+		var $readonlyEditorIconElem = $("#readonlyEditor > span");
+		if (this.editor.getReadOnly()) $readonlyEditorIconElem.removeClass("fa-eye").addClass("fa-pencil").parent().attr("title", "Enable editing");
+		else $readonlyEditorIconElem.addClass("fa-eye").removeClass("fa-pencil").parent().attr("title", "Disable editing");
 	},
 
 	onDataAvailable: function(model, data) {

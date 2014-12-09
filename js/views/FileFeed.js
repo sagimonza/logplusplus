@@ -15,7 +15,7 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 		var file = this.model.get("feed");
 		var filename = (file && file.name) || "";
 		document.title = filename;
-		this.options.$pickedLogFilename.text(filename);
+		this.options.$pickedFilename.text(filename);
 	},
 
 	pause: function() {

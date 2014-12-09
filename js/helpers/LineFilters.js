@@ -11,6 +11,11 @@ var LineFilterRules = [
 		names: ["responses"],
 		filter: function(line) { return line.responses && createFilterKey("custom", "responses"); }
 	},
+	{	desc: "remediation",
+		categories: ["custom"],
+		names: ["remediation"],
+		filter: function(line) { return line.remediation && createFilterKey("custom", "remediation"); }
+	},
 	{	desc: "severities",
 		categories: ["error", "warn", "info", "debug", "trace"],
 		names: Object.keys(LineTypes),

@@ -27,12 +27,14 @@ Log.Views.MenuSidebarClass = Backbone.View.extend({
 	},
 
 	onItemSelected: function(e) {
-		$(".sidebar-menu-item").removeClass("active");
-		$(e.currentTarget).addClass("active");
-
-		$(".main").attr("active", $(e.currentTarget).data("content-id"));
-
+		this.setActive($(e.currentTarget).data("content-id"));
 		this.hide();
+	},
+
+	setActive: function(id) {
+		$(".sidebar-menu-item").removeClass("active");
+		$("[data-content-id='" + id + "']").addClass("active");
+		$(".main").attr("active", id);
 	},
 
 	openGlobalFeedback: function() {

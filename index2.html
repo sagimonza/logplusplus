@@ -6,6 +6,7 @@
     <link href="css/lib/multiple-select.css" rel="stylesheet">
     <link href="css/lib/magnific-popup.css" rel="stylesheet">
     <link href="css/lib/jquery.sidr.light.css" rel="stylesheet">
+    <link href="css/lib/jsoneditor.min.css" rel="stylesheet">
 
     <link href="css/log5.css" rel="stylesheet">
 
@@ -14,6 +15,7 @@
     <script src="js/lib/backbone-min.js"></script>
     <script src="js/lib/backbone.babysitter.js"></script>
 
+    <script src="js/lib/jsoneditor.min.js"></script>
     <script src="js/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/lib/jszip.min.js"></script>
 
@@ -35,8 +37,8 @@
                         <a id="consoleLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#logFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedLogFilename" class="filename"></div>
                     </div>
                     <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
-                    <a id="clearConsole" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (not delete)"><span class="fa fa-remove"></span></a>
-                    <a id="reloadConsole" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file"><span class="fa fa-refresh"></span></a>
+                    <a id="clearConsole" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
+                    <a id="reloadConsole" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
                     <select id="All_Filters" class="headerAction" multiple></select>
                     <a id="favorite" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
                     <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
@@ -53,16 +55,37 @@
                         <input id="xmlLink" type="text" class="linkPicker"/>
                         <a id="xmlLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#xmlFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedXMLFilename" class="filename"></div>
                     </div>
-                    <a id="clearEditor" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (not delete)"><span class="fa fa-remove"></span></a>
-                    <a id="reloadEditor" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file"><span class="fa fa-refresh"></span></a>
+                    <a id="clearEditor" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
+                    <a id="reloadEditor" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
+                    <a id="readonlyEditor" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Enable editing"><span class="fa fa-pencil"></span></a>
                 </div>
             </div>
             <div id="xml" class="mainContent"></div>
         </div>
         <div id="json-view">
+            <div id="jsonActionBar" class="header">
+                <div class="actionsHeader">
+                    <a id="json-menu-sidebar-opener" class="headerAction pure-button" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
+                    <div class="feedPickerWrapper headerAction">
+                        <input id="jsonFile" type="file" class="filePicker"/>
+                        <input id="jsonLink" type="text" class="linkPicker"/>
+                        <a id="jsonLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#jsonFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedJSONFilename" class="filename"></div>
+                    </div>
+                    <a id="clearJSON" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
+                    <a id="reloadJSON" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
+                </div>
+            </div>
             <div id="json" class="mainContent"></div>
         </div>
         <div id="gallery-view">
+            <a id="gallery-menu-sidebar-opener" class="headerAction pure-button" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
+            <div class="feedPickerWrapper headerAction">
+                <input id="galleryFile" type="file" class="filePicker"/>
+                <input id="galleryLink" type="text" class="linkPicker"/>
+                <a id="galleryLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#galleryFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedGalleryFilename" class="filename"></div>
+            </div>
+            <a id="clearGallery" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
+            <a id="reloadGallery" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
             <div id="gallery" class="mainContent"></div>
         </div>
         <div id="emulator-view">
@@ -72,11 +95,11 @@
 
     <div id="menu-sidebar">
         <ul>
-            <li class="sidebar-menu-item active" data-content-id="console-view"><a href="#">Console</a></li>
-            <li class="sidebar-menu-item" data-content-id="xml-view"><a href="#">XML</a></li>
-            <!--<li class="sidebar-menu-item" data-content-id="json-view"><a href="#">JSON Viewer</a></li>
-            <li class="sidebar-menu-item" data-content-id="gallery-view"><a href="#">Gallery</a></li>
-            <li class="sidebar-menu-item" data-content-id="emulator-view"><a href="#">Emulator</a></li>-->
+            <li class="sidebar-menu-item active" data-content-id="console-view" title="Switch to Console (Alt+1)"><a href="#">Console</a></li>
+            <li class="sidebar-menu-item" data-content-id="xml-view" title="Switch to XML (Alt+2)"><a href="#">XML</a></li>
+            <li class="sidebar-menu-item" data-content-id="json-view" title="Switch to JSON (Alt+3)"><a href="#">JSON Viewer</a></li>
+            <li class="sidebar-menu-item" data-content-id="gallery-view" title="Switch to Gallery (Alt+4)"><a href="#">Gallery</a></li>
+            <!--<li class="sidebar-menu-item" data-content-id="emulator-view"><a href="#">Emulator</a></li>-->
             <li id="globalFeedback"><a id="feedbackLinkOpener" href="#urlPopup">Open Feedback...</a></li>
         </ul>
     </div>
@@ -132,6 +155,8 @@
     <script src="js/views/ConsoleLines.js"></script>
 
     <script src="js/views/Editor.js"></script>
+    <script src="js/views/jsonViewer.js"></script>
+    <script src="js/views/galleryViewer.js"></script>
 </body>
 
 </html>
