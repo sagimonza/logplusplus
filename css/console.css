@@ -1,0 +1,57 @@
+
+.console-log {
+    display: inline-block;
+    background-color: #1d1f21;
+    font-size: 14px;
+}
+
+.logLine {
+    cursor: default;
+    font-family: "Inconsolata";
+}
+
+#console > .logline {
+    white-space: pre;
+}
+
+#console[wrap] > .logline {
+    white-space: pre-wrap;
+}
+
+.logLine:hover {
+    background-color: darkslategray;
+}
+
+.logFavorite {
+    cursor: pointer;
+    margin-right: 3px;
+}
+
+.logJSON {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.logJSON:hover {
+    font-weight: bold;
+}
+
+.error {
+    color: #cc6666;
+}
+
+.warn {
+    color: #de935f;
+}
+
+.info {
+    color: #81a2be;
+}
+
+.debug {
+    color: #b5bd68;
+}
+
+.trace {
+    color: #b294bb;
+}
