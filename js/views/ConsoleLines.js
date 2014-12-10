@@ -26,6 +26,8 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		var $this = this;
 		$(document).keydown(function(e) {
+			if (getActiveView() != $this) return;
+			
 			if (!e.altKey && e.which == 113)
 				$this.showNextFavorite();
 			else if(e.altKey && e.which == 87)
@@ -35,6 +37,7 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 			else if(e.altKey && (e.which == 173 || e.which == 189))
 				$this.decreaseFontSize();
 		});
+
 		$(document).click(function(e) {
 			if ($(e.target).hasClass("logFavorite")) $this.toggleFavorite(e);
 		});

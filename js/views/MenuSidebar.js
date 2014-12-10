@@ -37,6 +37,10 @@ Log.Views.MenuSidebarClass = Backbone.View.extend({
 		$(".main").attr("active", id);
 	},
 
+	getActive: function() {
+		return $(".main").attr("active");
+	},
+
 	openGlobalFeedback: function() {
 		this.hide();
 	}

@@ -47,6 +47,18 @@ $(document).ready(function() {
 	var jsonViewer = new Log.Views.jsonViewerClass({ dataFeedModels: [fileFeeds.json.model, linkFeeds.json.model] });
 	var galleryViewer = new Log.Views.galleryViewerClass({ dataFeedModels: [fileFeeds.gallery.model, linkFeeds.gallery.model] });
 
+	function getActiveViewElem() {
+		return $("#" + menuSidebarView.getActive()).get(0);
+	}
+
+	window.getActiveView = function() {
+		var el = getActiveViewElem();
+		if ($.contains(el, consoleLines.el)) return consoleLines;
+		if ($.contains(el, editor.el)) return editor;
+		if ($.contains(el, jsonViewer.el)) return jsonViewer;
+		if ($.contains(el, galleryViewer.el)) return galleryViewer;
+	};
+
 	$(".reload").click(function() {
 		var view = $(this).prop("activeFeedView");
 		view && view.reload();
@@ -95,14 +107,11 @@ $(document).ready(function() {
 
 		e.preventDefault();
 
-		var el = $("#" + $(".main").attr("active")).get(0);
 		if (method == "clear") {
-			if ($.contains(el, consoleLines.el)) consoleLines.clear();
-			if ($.contains(el, editor.el)) editor.clear();
-			if ($.contains(el, jsonViewer.el)) jsonViewer.clear();
-			if ($.contains(el, galleryViewer.el)) galleryViewer.clear();
+			var activeView = window.getActiveView();
+			if (activeView) activeView.clear();
 		} else {
-			$(".reload", el).click();
+			$(".reload", getActiveViewElem()).click();
 		}
 	});
 
