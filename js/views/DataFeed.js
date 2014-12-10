@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.DataFeedClass = Backbone.View.extend({
+App.Views.DataFeedClass = Backbone.View.extend({
 	initialize: function() {
 		$("#pause").click(this.togglePaused.bind(this));
 		this.listenTo(this.model, "change:paused", this.onPausedChanged);

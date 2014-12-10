@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
+App.Views.FileFeedClass = App.Views.DataFeedClass.extend({
 	events: {
 		"change": "onFileChanged"
 	},
@@ -8,7 +8,7 @@ Log.Views.FileFeedClass = Log.Views.DataFeedClass.extend({
 	initialize: function(options) {
 		this.options = options;
 		this.listenTo(this.model, "change:feed", this.render);
-		Log.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
+		App.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
 
 	render: function() {

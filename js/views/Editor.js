@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.EditorClass = Backbone.View.extend({
+App.Views.EditorClass = Backbone.View.extend({
 	initialize: function(options) {
 		this.editor = ace.edit("xml");
 		this.editor.setTheme("ace/theme/monokai");

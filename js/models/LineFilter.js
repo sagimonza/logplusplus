@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Models.LineFilterClass = Backbone.Model.extend({
+App.Models.LineFilterClass = Backbone.Model.extend({
 	initialize: function() {
 		var filterMap = {};
 		LineFilters.forEach(function(filter) {

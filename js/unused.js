@@ -8,7 +8,7 @@ function createLineView(lineModel) {
 	lineModel.filters.forEach(function(filter, i) { attrs["filter" + i] = filter.filterKey });
 
 	var hidden = lineModel.get("hidden") ? "hidden" : "";
-	return new Log.Views.ConsoleLineClass({ model: lineModel, className: "logLine ".concat(lineModel.severity, " ", hidden), attributes: attrs });
+	return new App.Views.ConsoleLineClass({ model: lineModel, className: "logLine ".concat(lineModel.severity, " ", hidden), attributes: attrs });
 }
 
 

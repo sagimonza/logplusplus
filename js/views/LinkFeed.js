@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.LinkFeedClass = Log.Views.DataFeedClass.extend({
+App.Views.LinkFeedClass = App.Views.DataFeedClass.extend({
 	initialize: function(options) {
 		var $this = this;
 		this.options = options;
@@ -21,7 +21,7 @@ Log.Views.LinkFeedClass = Log.Views.DataFeedClass.extend({
 		});
 		if (!this.options.$delegateViews) this.$el.change(function(e) { return $this.onLinkChanged(e); });
 		this.model.filterRegexp = this.options.filterRegexp;
-		Log.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
+		App.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
 
 	render: function() {

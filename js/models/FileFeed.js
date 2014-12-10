@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
+App.Models.FileFeedClass = App.Models.DataFeedClass.extend({
 	defaults: {
 		paused: false
 	},
@@ -9,7 +9,7 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 		this.isDataURL = options.isDataURL;
 		this._fr = new FileReader();
 		this._fr.onloadend = this.onDataAvailable.bind(this);
-		Log.Models.DataFeedClass.prototype.initialize.apply(this, arguments);
+		App.Models.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
 
 	onDataAvailable: function() {
@@ -25,7 +25,7 @@ Log.Models.FileFeedClass = Log.Models.DataFeedClass.extend({
 	reset: function(startIndex) {
 		try { this._fr.abort(); } catch(ex) {}
 		if (typeof startIndex == "number") this.set("lastIndex", startIndex);
-		Log.Models.DataFeedClass.prototype.reset.apply(this, arguments);
+		App.Models.DataFeedClass.prototype.reset.apply(this, arguments);
 	},
 
 	nextChunk: function() {

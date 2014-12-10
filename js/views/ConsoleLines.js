@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.ConsoleLinesClass = Backbone.View.extend({
+App.Views.ConsoleLinesClass = Backbone.View.extend({
 	el: "#console",
 
 	initialize: function(options) {
@@ -27,7 +27,7 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		var $this = this;
 		$(document).keydown(function(e) {
 			if (getActiveView() != $this) return;
-			
+
 			if (!e.altKey && e.which == 113)
 				$this.showNextFavorite();
 			else if(e.altKey && e.which == 87)
@@ -156,7 +156,7 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 		}
 
 		if (nextFavorite) {
-			nextFavorite.parentElement.scrollIntoView(false);
+			nextFavorite.parentElement.scrollIntoView();
 			var range = document.createRange();
 			range.selectNode(nextFavorite.parentElement);
 			currentSelection.removeAllRanges();

@@ -1,6 +1,6 @@
 ;(function() {
 
-window.Log = {
+window.App = {
 	Models:			{},
 	Collections:	{},
 	Views:			{}
@@ -8,7 +8,7 @@ window.Log = {
 
 $(document).ready(function() {
 
-	var menuSidebarView = new Log.Views.MenuSidebarClass({ el: "#menu-sidebar",
+	var menuSidebarView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar",
 		$menuSidebarOpeners: [$("#console-menu-sidebar-opener"), $("#xml-menu-sidebar-opener"), $("#json-menu-sidebar-opener"), $("#gallery-menu-sidebar-opener")] });
 
 	var fileFeeds = {
@@ -20,8 +20,8 @@ $(document).ready(function() {
 
 	Object.keys(fileFeeds).forEach(function(feedKey) {
 		var feedObj = fileFeeds[feedKey];
-		feedObj.model = new Log.Models.FileFeedClass({ isDataURL: feedObj.isDataURL });
-		new Log.Views.FileFeedClass({ el: feedObj.elem, model: feedObj.model, $reloadView: feedObj.$reload, $pickedFilename: feedObj.$filename });
+		feedObj.model = new App.Models.FileFeedClass({ isDataURL: feedObj.isDataURL });
+		new App.Views.FileFeedClass({ el: feedObj.elem, model: feedObj.model, $reloadView: feedObj.$reload, $pickedFilename: feedObj.$filename });
 	});
 
 	var linkFeeds = {
@@ -34,18 +34,18 @@ $(document).ready(function() {
 
 	Object.keys(linkFeeds).forEach(function(feedKey) {
 		var feedObj = linkFeeds[feedKey];
-		feedObj.model = new Log.Models.LinkFeedClass({ isDataURL: feedObj.isDataURL });
-		new Log.Views.LinkFeedClass({ el: feedObj.elem, $delegateViews: feedObj.$delegate, model: feedObj.model,
+		feedObj.model = new App.Models.LinkFeedClass({ isDataURL: feedObj.isDataURL });
+		new App.Views.LinkFeedClass({ el: feedObj.elem, $delegateViews: feedObj.$delegate, model: feedObj.model,
 			filterRegexp: feedObj.regexp, $reloadView: feedObj.$reload,	$linkOpenerView: feedObj.$link, $pickedFilename: feedObj.$filename });
 	});
 
-	var filtersModel = new Log.Models.LineFilterClass();
-	(new Log.Views.LineFilterClass({ model: filtersModel })).render();
+	var filtersModel = new App.Models.LineFilterClass();
+	(new App.Views.LineFilterClass({ model: filtersModel })).render();
 
-	var consoleLines = new Log.Views.ConsoleLinesClass({ dataFeedModels: [fileFeeds.console.model, linkFeeds.console.model], filtersModel: filtersModel, menuSidebarView: menuSidebarView });
-	var editor = new Log.Views.EditorClass({ dataFeedModels: [fileFeeds.xml.model, linkFeeds.xml.model] });
-	var jsonViewer = new Log.Views.jsonViewerClass({ dataFeedModels: [fileFeeds.json.model, linkFeeds.json.model] });
-	var galleryViewer = new Log.Views.galleryViewerClass({ dataFeedModels: [fileFeeds.gallery.model, linkFeeds.gallery.model] });
+	var consoleLines = new App.Views.ConsoleLinesClass({ dataFeedModels: [fileFeeds.console.model, linkFeeds.console.model], filtersModel: filtersModel, menuSidebarView: menuSidebarView });
+	var editor = new App.Views.EditorClass({ dataFeedModels: [fileFeeds.xml.model, linkFeeds.xml.model] });
+	var jsonViewer = new App.Views.jsonViewerClass({ dataFeedModels: [fileFeeds.json.model, linkFeeds.json.model] });
+	var galleryViewer = new App.Views.galleryViewerClass({ dataFeedModels: [fileFeeds.gallery.model, linkFeeds.gallery.model] });
 
 	function getActiveViewElem() {
 		return $("#" + menuSidebarView.getActive()).get(0);

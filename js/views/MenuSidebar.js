@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.MenuSidebarClass = Backbone.View.extend({
+App.Views.MenuSidebarClass = Backbone.View.extend({
 	events : {
 		"click .sidebar-menu-item": "onItemSelected",
 		"click #globalFeedback": "openGlobalFeedback"

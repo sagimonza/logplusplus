@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Models.LinkFeedClass = Log.Models.DataFeedClass.extend({
+App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 	initialize: function(options) {
 		this.isDataURL = options.isDataURL;
 	},
@@ -48,7 +48,7 @@ Log.Models.LinkFeedClass = Log.Models.DataFeedClass.extend({
 
 	reset: function(data) {
 		try { this.xhr && this.xhr.abort(); } catch(ex) {}
-		Log.Models.DataFeedClass.prototype.reset.apply(this, arguments);
+		App.Models.DataFeedClass.prototype.reset.apply(this, arguments);
 	}
 });
 

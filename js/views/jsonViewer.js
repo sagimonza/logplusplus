@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.jsonViewerClass = Backbone.View.extend({
+App.Views.jsonViewerClass = Backbone.View.extend({
 	el: "#json",
 
 	initialize: function(options) {

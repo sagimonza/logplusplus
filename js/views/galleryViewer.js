@@ -1,6 +1,6 @@
 ;(function() {
 
-Log.Views.galleryViewerClass = Backbone.View.extend({
+App.Views.galleryViewerClass = Backbone.View.extend({
 	el: "#gallery",
 
 	initialize: function(options) {
