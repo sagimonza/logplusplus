@@ -12,7 +12,7 @@ body {
 }
 
 .actionsHeader {
-    background-color: #fbfbfb;
+    background-color: #282a2e;
     height: 36px;
     padding: 3px 3px;
     border-bottom: 2px solid grey;
@@ -89,7 +89,8 @@ body {
 
 .console-log {
     display: inline-block;
-    background-color: black;
+    background-color: #1d1f21;
+	font-size: 14px;
 }
 
 .feedPickerWrapper {
@@ -138,8 +139,17 @@ body {
 
 .logLine {
     cursor: default;
-    white-space: pre;
-    font-family: "Andale Mono",monospace;
+    font-family: "Inconsolata";
+}
+
+
+#console > .logline {
+	white-space: pre;
+
+}
+
+#console[wrap] > .logline {
+	white-space: pre-wrap;
 }
 
 .logLine:hover {
@@ -186,19 +196,23 @@ body {
 }
 
 .error {
-	color: red;
+	color: #cc6666;
 }
 
 .warn {
-	color: orange;
+	color: #de935f;
 }
 
 .info {
-	color: dodgerblue;
+	color: #81a2be;
 }
 
-.debug, .trace {
-	color: white;
+.debug {
+	color: #b5bd68;
+}
+
+.trace {
+	color: #b294bb;
 }
 
 .hidden {

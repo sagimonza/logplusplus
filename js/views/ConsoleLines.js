@@ -20,9 +20,21 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		$("#clearConsole").on("click", this.clear.bind(this));
 		$("#favorite").on("click", this.showNextFavorite.bind(this));
+		$("#wrapText").on("click", this.toggleWrapText.bind(this));
+		$("#increaseFontSize").on("click", this.increaseFontSize.bind(this));
+		$("#decreaseFontSize").on("click", this.decreaseFontSize.bind(this));
 
 		var $this = this;
-		$(document).keydown(function(e) { if (!e.altKey && e.which == 113) $this.showNextFavorite(); });
+		$(document).keydown(function(e) {
+			if (!e.altKey && e.which == 113)
+				$this.showNextFavorite();
+			else if(e.altKey && e.which == 87)
+				$this.toggleWrapText();
+			else if(e.altKey && (e.which == 61 || e.which == 187))
+				$this.increaseFontSize();
+			else if(e.altKey && (e.which == 173 || e.which == 189))
+				$this.decreaseFontSize();
+		});
 		$(document).click(function(e) {
 			if ($(e.target).hasClass("logFavorite")) $this.toggleFavorite(e);
 		});
@@ -147,6 +159,24 @@ Log.Views.ConsoleLinesClass = Backbone.View.extend({
 			currentSelection.removeAllRanges();
 			currentSelection.addRange(range);
 		}
+	},
+
+	toggleWrapText : function() {
+		var cons = $("#console");
+		if (cons.attr("wrap")) {
+			cons.removeAttr("wrap").css("overflow-x","auto");
+		} else {
+			cons.attr("wrap","wrap").css("overflow-x","hidden");
+		}
+	},
+
+	increaseFontSize : function() {
+		var fontSize = parseInt($(".console-log").css("font-size")) + 2;
+		$(".console-log").css("font-size",  fontSize + "px");
+	},
+	decreaseFontSize : function() {
+		var fontSize = parseInt($(".console-log").css("font-size")) - 2;
+		$(".console-log").css("font-size", fontSize + "px");
 	}
 });
 
