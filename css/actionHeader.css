@@ -7,14 +7,52 @@
     width: 100%;
 }
 
-.actionsHeader {
+.actions-header {
     background-color: #282a2e;
-    height: 36px;
-    padding: 3px 3px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 3px;
     border-bottom: 2px solid grey;
 }
 
-.header.collapsed > .actionsHeader {
+.actions-header a {
+    outline: none;
+}
+
+.actions-header .header-action {
+    color: #fbfbfb;
+    vertical-align: middle;
+}
+
+.actions-header .header-action:hover {
+    background-color: #505255;
+    border-top: 1px solid #fbfbfb;
+    border-bottom: 1px solid #fbfbfb;
+}
+
+.actions-header .padded-header-action {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.actions-header .header-action-section {
+    border-right: 1px solid #fbfbfb;
+    border-left: 1px solid #fbfbfb;
+    vertical-align: middle;
+}
+
+.menu-sidebar-opener {
+    font-size: 28px;
+    padding-right: 50px;
+    color: #fbfbfb;
+    vertical-align: middle;
+}
+
+.header-remove-action {
+    font-size: 1.3em;
+}
+
+.header.collapsed > .actions-header {
     height: 0px;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -22,18 +60,14 @@
     border-bottom: 2px solid #fbfbfb;
 }
 
-.headerAction {
-    margin-right : 5px;
-}
-
-#All_Filters {
+#allFilters {
     display: none;
 }
 
 .feedPickerWrapper {
     position: relative;
     display: inline-block;
-    border: 2px solid #0078e7;
+    border: 2px solid #fbfbfb;
 }
 
 .feedPickerButton {
@@ -54,11 +88,8 @@
     display: none;
 }
 
-.linkOpener {
-    border-right: 2px #004F9D solid;
-}
-
 .filename {
+    color: #fbfbfb;
     display: inline-block;
     min-width: 100px;
     max-width: 230px;
@@ -72,4 +103,16 @@
 .filterAction, .limitAction {
     max-width: 150px;
     display: inline-block;
+}
+
+.ms-choice {
+    background-color: #282a2e;
+    height: 24px;
+    color: #fbfbfb;
+}
+
+.ms-drop, .ms-search input[type='text'] {
+    background-color: #282a2e;
+    background-image: none;
+    color: white;
 }

@@ -8,68 +8,110 @@ window.App = {
 
 $(document).ready(function() {
 
-	var menuSidebarView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar",
-		$menuSidebarOpeners: [$("#console-menu-sidebar-opener"), $("#xml-menu-sidebar-opener"), $("#json-menu-sidebar-opener"), $("#gallery-menu-sidebar-opener")] });
+	var menuOpenerIds = [];
+	var mainViews =	[
+		{	viewClass: "ConsoleLinesClass",
+			rootId: "console-view",
+			contentId: "console",
+			actionBarId: "consoleActionBar",
+			sidebarOpenerId: "console-menu-sidebar-opener",
+			headerActions: ["headerFeedTemplate", "headerFiltersTemplate", "headerPauseTemplate", "headerSectionTemplate",
+				"headerRefreshTemplate", "headerSectionTemplate", "headerFontTemplate", "headerSectionTemplate", "headerFavTemplate"],
+			headerActionsData: {
+				fileId: "logFile",
+				linkId: "logLink",
+				pauseId: "pause",
+				clearId: "clearConsole",
+				reloadId: "reloadConsole",
+				wrapId: "wrapText",
+				incFontId: "increaseFontSize",
+				decFontId: "decreaseFontSize",
+				defFontId: "defaultFontSize",
+				favId: "favorite",
+				filenameId: "pickedLogFilename",
+				filterRegexp: /.log$/,
+				filtersId: "allFilters",
+				linkOpenerId: "consoleLinkOpener"
+			}
+		},
+		{	viewClass: "EditorClass",
+			rootId: "xml-view",
+			contentId: "xml",
+			actionBarId: "xmlActionBar",
+			sidebarOpenerId: "xml-menu-sidebar-opener",
+			headerActions: ["headerFeedTemplate", "headerRefreshTemplate", "headerSectionTemplate", "headerReadonlyTemplate"],
+			headerActionsData: {
+				fileId: "xmlFile",
+				linkId: "xmlLink",
+				clearId: "clearEditor",
+				reloadId: "reloadEditor",
+				filenameId: "pickedXMLFilename",
+				filterRegexp: /.xml$/,
+				readonlyId: "readonlyEditor",
+				linkOpenerId: "xmlLinkOpener"
+			}
+		},
+		{	viewClass: "JsonViewerClass",
+			rootId: "json-view",
+			contentId: "json",
+			actionBarId: "jsonActionBar",
+			sidebarOpenerId: "json-menu-sidebar-opener",
+			headerActions: ["headerFeedTemplate", "headerRefreshTemplate"],
+			headerActionsData: {
+				fileId: "jsonFile",
+				linkId: "jsonLink",
+				clearId: "clearJSON",
+				reloadId: "reloadJSON",
+				filenameId: "pickedJSONFilename",
+				filterRegexp: /.json$/,
+				linkOpenerId: "jsonLinkOpener"
+			}
+		},
+		{	viewClass: "GalleryViewerClass",
+			rootId: "gallery-view",
+			contentId: "gallery",
+			actionBarId: "galleryActionBar",
+			sidebarOpenerId: "gallery-menu-sidebar-opener",
+			headerActions: ["headerFeedTemplate", "headerRefreshTemplate"],
+			headerActionsData: {
+				fileId: "galleryFile",
+				linkId: "galleryLink",
+				clearId: "clearGallery",
+				reloadId: "reloadGallery",
+				filenameId: "pickedGalleryFilename",
+				filterRegexp: /.jpg$|.png$|.gif$/,
+				linkOpenerId: "galleryLinkOpener",
+				isDataURL: true
+			}
+		}
+	].map(function(headersDef) { menuOpenerIds.push(headersDef.sidebarOpenerId); return ViewBuilder.build(headersDef); });
 
-	var fileFeeds = {
-		console: { elem: "#logFile", $reload: $("#reloadConsole"), $filename: $("#pickedLogFilename") },
-		xml: { elem: "#xmlFile", $reload: $("#reloadEditor"), $filename: $("#pickedXMLFilename") },
-		json: { elem: "#jsonFile", $reload: $("#reloadJSON"), $filename: $("#pickedJSONFilename") },
-		gallery: { elem: "#galleryFile", $reload: $("#reloadGallery"), $filename: $("#pickedGalleryFilename"), isDataURL: true }
-	};
+	ViewBuilder.createLinkFeedView({ delegates: ["logLink", "xmlLink", "galleryLink"], linkOpenerId: "feedbackLinkOpener", linkId: "" });
 
-	Object.keys(fileFeeds).forEach(function(feedKey) {
-		var feedObj = fileFeeds[feedKey];
-		feedObj.model = new App.Models.FileFeedClass({ isDataURL: feedObj.isDataURL });
-		new App.Views.FileFeedClass({ el: feedObj.elem, model: feedObj.model, $reloadView: feedObj.$reload, $pickedFilename: feedObj.$filename });
-	});
-
-	var linkFeeds = {
-		console: { elem: "#logLink", $reload: $("#reloadConsole"), regexp: /.log$/, $link: $("#consoleLinkOpener"), $filename: $("#pickedLogFilename") },
-		xml: { elem: "#xmlLink", $reload: $("#reloadEditor"), regexp: /.xml$/, $link: $("#xmlLinkOpener"), $filename: $("#pickedXMLFilename") },
-		json: { elem: "#jsonLink", $reload: $("#reloadJSON"), regexp: /.json$/, $link: $("#jsonLinkOpener"), $filename: $("#pickedJSONFilename") },
-		gallery: { elem: "#galleryLink", $reload: $("#reloadGallery"), regexp: /.jpg$|.png$|.gif$/, $link: $("#galleryLinkOpener"), $filename: $("#pickedGalleryFilename"), isDataURL: true },
-		feedback: { $delegate: [$("#logLink"), $("#xmlLink"), $("#galleryLink")], $link: $("#feedbackLinkOpener") }
-	};
-
-	Object.keys(linkFeeds).forEach(function(feedKey) {
-		var feedObj = linkFeeds[feedKey];
-		feedObj.model = new App.Models.LinkFeedClass({ isDataURL: feedObj.isDataURL });
-		new App.Views.LinkFeedClass({ el: feedObj.elem, $delegateViews: feedObj.$delegate, model: feedObj.model,
-			filterRegexp: feedObj.regexp, $reloadView: feedObj.$reload,	$linkOpenerView: feedObj.$link, $pickedFilename: feedObj.$filename });
-	});
-
-	var filtersModel = new App.Models.LineFilterClass();
-	(new App.Views.LineFilterClass({ model: filtersModel })).render();
-
-	var consoleLines = new App.Views.ConsoleLinesClass({ dataFeedModels: [fileFeeds.console.model, linkFeeds.console.model], filtersModel: filtersModel, menuSidebarView: menuSidebarView });
-	var editor = new App.Views.EditorClass({ dataFeedModels: [fileFeeds.xml.model, linkFeeds.xml.model] });
-	var jsonViewer = new App.Views.jsonViewerClass({ dataFeedModels: [fileFeeds.json.model, linkFeeds.json.model] });
-	var galleryViewer = new App.Views.galleryViewerClass({ dataFeedModels: [fileFeeds.gallery.model, linkFeeds.gallery.model] });
+	var menuSidebarView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar", $menuSidebarOpeners: menuOpenerIds.map(function(id) { return $("#" + id); }) });
 
 	function getActiveViewElem() {
 		return $("#" + menuSidebarView.getActive()).get(0);
 	}
 
 	window.getActiveView = function() {
-		var el = getActiveViewElem();
-		if ($.contains(el, consoleLines.el)) return consoleLines;
-		if ($.contains(el, editor.el)) return editor;
-		if ($.contains(el, jsonViewer.el)) return jsonViewer;
-		if ($.contains(el, galleryViewer.el)) return galleryViewer;
+		var el = getActiveViewElem(), activeView;
+		mainViews.some(function(view) {
+			if ($.contains(el, view.el)) return activeView = view; });
+		return activeView;
+	};
+
+	window.setActiveView = function(id) {
+		menuSidebarView.setActive(id);
+	};
+
+	window.isActiveView = function(view) {
+		return view == window.getActiveView();
 	};
 
 	$(".reload").click(function() {
 		var view = $(this).prop("activeFeedView");
 		view && view.reload();
-	});
-
-	$(document).click(function(e) {
-		if ($(e.target).hasClass("logJSON")) {
-			jsonViewer.clear();
-			jsonViewer.onDataAvailable(null, e.target.textContent);
-			menuSidebarView.setActive("json-view");
-		}
 	});
 
 	$(document).keydown(function(e) {
@@ -82,7 +124,7 @@ $(document).ready(function() {
 			case 52: menuSidebarView.setActive("gallery-view"); break;
 			case 113:
 				var innerHovered = $("div:hover").last();
-				var $favorite = $(".logFavorite", innerHovered.get(0));
+				var $favorite = $(".log-favorite", innerHovered.get(0));
 				if ($favorite.length == 1) $favorite.click();
 				break;
 			default: return;
@@ -114,7 +156,6 @@ $(document).ready(function() {
 			$(".reload", getActiveViewElem()).click();
 		}
 	});
-
 });
 
 })();

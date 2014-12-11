@@ -76,7 +76,7 @@ var lineParsers = {
 
 function addLine(text) {
 	var lineDiv = document.createElement("div");
-	lineDiv.classList.add("logLine");
+	lineDiv.classList.add("log-line");
 
 	var ts, type, severity, msg;
 
@@ -113,7 +113,7 @@ function addLine(text) {
 }
 
 function pruneLines() {
-	var lines = consoleElem.getElementsByClassName("logLine"), limitVal = Number(linesLimit.value);
+	var lines = consoleElem.getElementsByClassName("log-line"), limitVal = Number(linesLimit.value);
 	for (var i = 0; (lines.length - i) > limitVal; ++i) {
 		lines[i].remove();
 	}
@@ -214,7 +214,7 @@ var severityFilterKeys = Object.keys(severityFilters);
 
 function initFilters() {
 	function _setFilters() {
-		setSeverityFilters($("#All_Filters").multipleSelect("getSelects"));
+		setSeverityFilters($("#allFilters").multipleSelect("getSelects"));
 	}
 
 	function addFilterOption(group, type, severity) {
@@ -223,7 +223,7 @@ function initFilters() {
 		group.insertBefore(opt, null);
 	}
 
-	var select = $("#All_Filters");
+	var select = $("#allFilters");
 
 	var customFilterGroup;
 	customFilterTypes.forEach(function(type) {

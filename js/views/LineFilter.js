@@ -1,7 +1,7 @@
 ;(function() {
 
 App.Views.LineFilterClass = Backbone.View.extend({
-	el: "#All_Filters",
+	el: "#allFilters",
 
 	template: _.template($("#lineFilterTemplate").html(), { variable : "args" }),
 

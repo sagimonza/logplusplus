@@ -26,7 +26,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		var $this = this;
 		$(document).keydown(function(e) {
-			if (getActiveView() != $this) return;
+			if (!isActiveView($this)) return;
 
 			if (!e.altKey && e.which == 113)
 				$this.showNextFavorite();
@@ -39,7 +39,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		});
 
 		$(document).click(function(e) {
-			if ($(e.target).hasClass("logFavorite")) $this.toggleFavorite(e);
+			if ($(e.target).hasClass("log-favorite")) $this.toggleFavorite(e);
 		});
 	},
 
@@ -147,12 +147,12 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 
 	showNextFavorite: function() {
 		var currentSelection = window.getSelection();
-		var view = $(currentSelection.baseNode).closest(".logLine");
-		var nextFavorite = $("~ .logLine:not(.hidden) > .fa-star", view).get(0);
+		var view = $(currentSelection.baseNode).closest(".log-line");
+		var nextFavorite = $("~ .log-line:not(.hidden) > .fa-star", view).get(0);
 		if (!nextFavorite) {
 			var firstModel = this.modelCollection[0];
 			view = firstModel && $(firstModel.__view);
-			nextFavorite = view && $("~ .logLine > .fa-star", view).get(0);
+			nextFavorite = view && $("~ .log-line > .fa-star", view).get(0);
 		}
 
 		if (nextFavorite) {
@@ -174,12 +174,12 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 	},
 
 	increaseFontSize : function() {
-		var fontSize = parseInt($(".console-log").css("font-size")) + 2;
-		$(".console-log").css("font-size",  fontSize + "px");
+		var fontSize = parseInt($("#console").css("font-size")) + 2;
+		$("#console").css("font-size",  fontSize + "px");
 	},
 	decreaseFontSize : function() {
-		var fontSize = parseInt($(".console-log").css("font-size")) - 2;
-		$(".console-log").css("font-size", fontSize + "px");
+		var fontSize = parseInt($("#console").css("font-size")) - 2;
+		$("#console").css("font-size", fontSize + "px");
 	}
 });
 

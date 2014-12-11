@@ -5,13 +5,13 @@ window.ConsoleLineView = function(lineModel) {
 	var hidden = lineModel.hidden ? "hidden" : "";
 	view.setAttribute("type", lineModel.type);
 	view.setAttribute("severity", lineModel.severity);
-	view.setAttribute("class", "logLine ".concat(lineModel.severity, " ", hidden));
+	view.setAttribute("class", "log-line ".concat(lineModel.severity, " ", hidden));
 
 	var filters = lineModel.filters, filterLen = filters.length;
 	for (var i = 0; i < filterLen; ++i) view.setAttribute("filter" + i, filters[i]);
 
 	var fav = document.createElement("span");
-	fav.setAttribute("class", "logFavorite fa fa-star-o");
+	fav.setAttribute("class", "log-favorite fa fa-star-o");
 	view.appendChild(fav);
 
 	if (lineModel.message) {
@@ -37,8 +37,8 @@ window.ConsoleLineView = function(lineModel) {
 	view.show = function() { this.classList.remove("hidden"); };
 	view.getHeight = function() { return $(this).height(); };
 	view.onFavoriteChange = function() {
-		$(".logFavorite", this).toggleClass("fa-star-o");
-		$(".logFavorite", this).toggleClass("fa-star");
+		$(".log-favorite", this).toggleClass("fa-star-o");
+		$(".log-favorite", this).toggleClass("fa-star");
 	};
 	view.onHiddenChange = function(newHidden) {
 		if (newHidden) this.hide();

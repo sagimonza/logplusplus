@@ -29,75 +29,10 @@
 </head>
 
 <body>
-    <div class="main" active="console-view">
-        <div id="console-view">
-            <div id="consoleActionBar" class="header">
-                <div class="actionsHeader">
-                    <a id="console-menu-sidebar-opener" class="headerAction pure-button menu-sidebar-opener" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
-                    <div class="feedPickerWrapper headerAction">
-                        <input id="logFile" type="file" class="filePicker"/>
-                        <input id="logLink" type="text" class="linkPicker"/>
-                        <a id="consoleLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#logFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedLogFilename" class="filename"></div>
-                    </div>
-                    <a id="pause" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
-                    <a id="clearConsole" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
-                    <a id="reloadConsole" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
-                    <select id="All_Filters" class="headerAction" multiple></select>
-                    <a id="favorite" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
-
-                    <a id="wrapText"         href="javascript:void(0)" class="wrapText         headerAction pure-button pure-button-primary" title="Wrap Text (Ctrl+W)"><span class="fa fa-align-justify"></span></a>
-                    <a id="increaseFontSize" href="javascript:void(0)" class="increaseFontSize headerAction pure-button pure-button-primary" title="Increase font size (Ctrl +)"><span class="fa fa-plus"></span></a>
-                    <a id="decreaseFontSize" href="javascript:void(0)" class="decreaseFontSize headerAction pure-button pure-button-primary" title="Decrease font size (Ctrl -)"><span class="fa fa-minus"></span></a>
-                    <!--<label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>-->
-                </div>
-            </div>
-            <div id="console" class="mainContent console-log"></div>
-        </div>
-        <div id="xml-view">
-            <div id="xmlActionBar" class="header">
-                <div class="actionsHeader">
-                    <a id="xml-menu-sidebar-opener" class="headerAction pure-button" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
-                    <div class="feedPickerWrapper headerAction">
-                        <input id="xmlFile" type="file" class="filePicker"/>
-                        <input id="xmlLink" type="text" class="linkPicker"/>
-                        <a id="xmlLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#xmlFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedXMLFilename" class="filename"></div>
-                    </div>
-                    <a id="clearEditor" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
-                    <a id="reloadEditor" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
-                    <a id="readonlyEditor" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Enable editing"><span class="fa fa-pencil"></span></a>
-                </div>
-            </div>
-            <div id="xml" class="mainContent"></div>
-        </div>
-        <div id="json-view">
-            <div id="jsonActionBar" class="header">
-                <div class="actionsHeader">
-                    <a id="json-menu-sidebar-opener" class="headerAction pure-button" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
-                    <div class="feedPickerWrapper headerAction">
-                        <input id="jsonFile" type="file" class="filePicker"/>
-                        <input id="jsonLink" type="text" class="linkPicker"/>
-                        <a id="jsonLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#jsonFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedJSONFilename" class="filename"></div>
-                    </div>
-                    <a id="clearJSON" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
-                    <a id="reloadJSON" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
-                </div>
-            </div>
-            <div id="json" class="mainContent"></div>
-        </div>
-        <div id="gallery-view">
-            <a id="gallery-menu-sidebar-opener" class="headerAction pure-button" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
-            <div class="feedPickerWrapper headerAction">
-                <input id="galleryFile" type="file" class="filePicker"/>
-                <input id="galleryLink" type="text" class="linkPicker"/>
-                <a id="galleryLinkOpener" href="#urlPopup" class="linkOpener feedPickerButton pure-button pure-button-primary" title="Open url..."><span class="fa fa-link"></span></a><a href="javascript:void(0)" class="feedPickerButton pure-button pure-button-primary" onclick="$('#galleryFile').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="pickedGalleryFilename" class="filename"></div>
-            </div>
-            <a id="clearGallery" href="javascript:void(0)" class="headerAction pure-button pure-button-primary" title="Clear content (Ctrl+C)"><span class="fa fa-remove"></span></a>
-            <a id="reloadGallery" href="javascript:void(0)" class="reload headerAction pure-button pure-button-primary" title="Reload file (Ctrl+R)"><span class="fa fa-refresh"></span></a>
-            <div id="gallery" class="mainContent"></div>
-        </div>
-        <div id="emulator-view">
+    <div id="main" class="main" active="console-view">
+<!--        <div id="emulator-view">
             <div id="emulator" class="mainContent"></div>
-        </div>
+        </div>-->
     </div>
 
     <div id="menu-sidebar">
@@ -121,6 +56,55 @@
 
     <div id="shield" class="hidden"></div>
 
+    <script type="text/template" id="headerGenericTemplate">
+        <div id="<%= args.actionBarId %>" class="header">
+            <div class="actions-header">
+                <a id="<%= args.sidebarOpenerId %>" class="menu-sidebar-opener" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="headerFeedTemplate">
+        <div class="feedPickerWrapper">
+            <input id="<%= args.fileId %>" type="file" class="filePicker"/>
+            <input id="<%= args.linkId %>" type="text" class="linkPicker"/>
+            <a id="<%= args.linkOpenerId %>" href="#urlPopup" class="linkOpener header-action padded-header-action feedPickerButton" title="Open url..."><span class="fa fa-link"></span></a><span class="header-action-section"></span><a href="javascript:void(0)" class="feedPickerButton header-action padded-header-action" onclick="$('#<%= args.fileId %>').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="<%= args.filenameId %>" class="filename"></div>
+        </div>
+    </script>
+
+    <script type="text/template" id="headerFiltersTemplate">
+        <select id="<%= args.filtersId %>" multiple></select>
+    </script>
+
+    <script type="text/template" id="headerPauseTemplate">
+        <a id="<%= args.pauseId %>" href="javascript:void(0)" class="header-action padded-header-action" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
+    </script>
+
+    <script type="text/template" id="headerRefreshTemplate">
+        <a id="<%= args.clearId %>" href="javascript:void(0)" class="header-action padded-header-action header-remove-action" title="Clear content (Alt+C)"><span class="fa fa-remove"></span></a>
+        <a id="<%= args.reloadId %>" href="javascript:void(0)" class="reload header-action padded-header-action" title="Reload file (Alt+R)"><span class="fa fa-refresh"></span></a>
+    </script>
+
+    <script type="text/template" id="headerFontTemplate">
+        <a id="<%= args.wrapId %>" href="javascript:void(0)" class="wrapText header-action padded-header-action" title="Wrap Text (Alt+W)"><span class="fa fa-align-justify"></span></a>
+        <span class="header-action-section"></span>
+        <a id="<%= args.incFontId %>" href="javascript:void(0)" class="increaseFontSize header-action padded-header-action" title="Increase font size (Alt+)"><span class="fa fa-plus"></span></a>
+        <a id="<%= args.decFontId %>" href="javascript:void(0)" class="decreaseFontSize header-action padded-header-action" title="Decrease font size (Alt-)"><span class="fa fa-minus"></span></a>
+        <a id="<%= args.defFontId %>" href="javascript:void(0)" class="decreaseFontSize header-action padded-header-action" title="Font size to default"><span class="fa fa-undo"></span></a>
+    </script>
+
+    <script type="text/template" id="headerFavTemplate">
+        <a id="<%= args.favId %>" href="javascript:void(0)" class="header-action padded-header-action" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
+    </script>
+
+    <script type="text/template" id="headerReadonlyTemplate">
+        <a id="<%= args.readonlyId %>" href="javascript:void(0)" class="header-action padded-header-action" title="Enable editing"><span class="fa fa-pencil"></span></a>
+    </script>
+
+    <script type="text/template" id="headerSectionTemplate">
+        <span class="header-action-section"></span>
+    </script>
+
     <script type="text/template" id="lineFilterTemplate">
         <% _.each(args.categories, function(category) { %>
         <optgroup label="<%= category %>">
@@ -132,7 +116,7 @@
     </script>
 
     <script type="text/template" id="consoleLineTemplate">
-        <div type="<%= args.type %>" severity="<%= args.severity %>" class="logLine <%= args.severity %>"  ><%= args.text %></div>
+        <div type="<%= args.type %>" severity="<%= args.severity %>" class="log-line <%= args.severity %>"  ><%= args.text %></div>
     </script>
 
     <script src="js/main.js"></script>
@@ -140,6 +124,7 @@
     <script src="js/helpers/LineTypes.js"></script>
     <script src="js/helpers/LineFilters.js"></script>
     <script src="js/helpers/LineParsers.js"></script>
+    <script src="js/helpers/ViewBuilder.js"></script>
 
     <script src="js/models/ActionBar.js"></script>
     <script src="js/views/ActionBar.js"></script>

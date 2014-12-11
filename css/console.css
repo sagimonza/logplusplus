@@ -1,28 +1,28 @@
 
-.console-log {
+#console {
     display: inline-block;
     background-color: #1d1f21;
     font-size: 14px;
 }
 
-.logLine {
+.log-line {
     cursor: default;
     font-family: "Inconsolata";
 }
 
-#console > .logline {
+#console > .log-line {
     white-space: pre;
 }
 
-#console[wrap] > .logline {
+#console[wrap] > .log-line {
     white-space: pre-wrap;
 }
 
-.logLine:hover {
+.log-line:hover {
     background-color: darkslategray;
 }
 
-.logFavorite {
+.log-favorite {
     cursor: pointer;
     margin-right: 3px;
 }

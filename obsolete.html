@@ -24,7 +24,7 @@
         <a id="resume" href="javascript:void(0)" class="pure-button pure-button-primary">Resume</a>
         <a id="clear" href="javascript:void(0)" class="pure-button pure-button-primary">Clear</a>
         <a id="clear" href="javascript:void(0)" class="pure-button pure-button-primary">Reload</a>
-        <select id="All_Filters" multiple></select>
+        <select id="allFilters" multiple></select>
         <label>Limit:<input id="limit" type="number" value="500000" class="limitAction" /></label>
     </div>
     <div class="expandCollapse"></div>
@@ -46,7 +46,7 @@
 </script>
 
 <script type="text/template" id="consoleLineTemplate">
-    <div type="<%= args.type %>" severity="<%= args.severity %>" class="logLine <%= args.severity %>" <% _.each(filters, function(filter, i) { %> filter<%= i %>="<%= filter.key %>" <% } %> ><%= args.text %></div>
+    <div type="<%= args.type %>" severity="<%= args.severity %>" class="log-line <%= args.severity %>" <% _.each(filters, function(filter, i) { %> filter<%= i %>="<%= filter.key %>" <% } %> ><%= args.text %></div>
 </script>
 
 <script src="js/log5.js"></script>

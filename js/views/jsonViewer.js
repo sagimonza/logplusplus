@@ -1,6 +1,6 @@
 ;(function() {
 
-App.Views.jsonViewerClass = Backbone.View.extend({
+App.Views.JsonViewerClass = Backbone.View.extend({
 	el: "#json",
 
 	initialize: function(options) {
@@ -12,7 +12,15 @@ App.Views.jsonViewerClass = Backbone.View.extend({
 			this.listenTo(dataFeedModel, "dataAvailable", this.onDataAvailable);
 		}, this);
 
+		var $this = this;
 		$("#clearJSON").on("click", this.clear.bind(this));
+		$(document).click(function(e) {
+			if ($(e.target).hasClass("logJSON")) {
+				$this.clear();
+				$this.onDataAvailable(null, e.target.textContent);
+				setActiveView("json-view");
+			}
+		});
 	},
 
 	clear: function() {
