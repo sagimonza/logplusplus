@@ -26,7 +26,7 @@ $(document).ready(function() {
 				wrapId: "wrapText",
 				incFontId: "increaseFontSize",
 				decFontId: "decreaseFontSize",
-				defFontId: "defaultFontSize",
+				defFontId: "resetFontSize",
 				favId: "favorite",
 				filenameId: "pickedLogFilename",
 				filterRegexp: /.log$/,

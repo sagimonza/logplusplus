@@ -23,6 +23,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		$("#wrapText").on("click", this.toggleWrapText.bind(this));
 		$("#increaseFontSize").on("click", this.increaseFontSize.bind(this));
 		$("#decreaseFontSize").on("click", this.decreaseFontSize.bind(this));
+		$("#resetFontSize").on("click", this.resetFontSize.bind(this));
 
 		var $this = this;
 		$(document).keydown(function(e) {
@@ -177,9 +178,14 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		var fontSize = parseInt($("#console").css("font-size")) + 2;
 		$("#console").css("font-size",  fontSize + "px");
 	},
+
 	decreaseFontSize : function() {
 		var fontSize = parseInt($("#console").css("font-size")) - 2;
 		$("#console").css("font-size", fontSize + "px");
+	},
+
+	resetFontSize: function() {
+		$("#console").css("font-size", "");
 	}
 });
 
