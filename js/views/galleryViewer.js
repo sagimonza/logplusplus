@@ -1,10 +1,7 @@
 ;(function() {
 
 App.Views.GalleryViewerClass = Backbone.View.extend({
-	el: "#gallery",
-
 	initialize: function(options) {
-		//this.editor = new JSONEditor(this.el, { mode: "view", modes: ["view", "form"] });
 		this.image = document.createElement("img");
 		this.el.appendChild(this.image);
 
@@ -14,7 +11,7 @@ App.Views.GalleryViewerClass = Backbone.View.extend({
 			this.listenTo(dataFeedModel, "dataAvailable", this.onDataAvailable);
 		}, this);
 
-		$("#clearGallery").on("click", this.clear.bind(this));
+		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
 	},
 
 	clear: function() {

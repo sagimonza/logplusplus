@@ -60,10 +60,6 @@
     border-bottom: 2px solid #fbfbfb;
 }
 
-#allFilters {
-    display: none;
-}
-
 .feedPickerWrapper {
     position: relative;
     display: inline-block;

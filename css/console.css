@@ -1,5 +1,5 @@
 
-#console {
+#console-view .mainContent {
     display: inline-block;
     background-color: #1d1f21;
     font-size: 14px;
@@ -10,11 +10,11 @@
     font-family: "Inconsolata";
 }
 
-#console > .log-line {
+#console-view .mainContent > .log-line {
     white-space: pre;
 }
 
-#console[wrap] > .log-line {
+#console-view .mainContent[wrap] > .log-line {
     white-space: pre-wrap;
 }
 

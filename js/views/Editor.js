@@ -2,7 +2,7 @@
 
 App.Views.EditorClass = Backbone.View.extend({
 	initialize: function(options) {
-		this.editor = ace.edit("xml");
+		this.editor = ace.edit(this.$el.attr("id"));
 		this.editor.setTheme("ace/theme/monokai");
 		this.editor.getSession().setMode("ace/mode/xml");
 		this.editor.setReadOnly(true);
@@ -14,8 +14,10 @@ App.Views.EditorClass = Backbone.View.extend({
 			this.listenTo(dataFeedModel, "dataAvailable", this.onDataAvailable);
 		}, this);
 
-		$("#clearEditor").on("click", this.clear.bind(this));
-		$("#readonlyEditor").click(this.toggleEditing.bind(this));
+		this.readonlyId = options.ids.readonlyId;
+
+		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
+		$("#" + options.ids.readonlyId).click(this.toggleEditing.bind(this));
 	},
 
 	clear: function() {
@@ -25,7 +27,7 @@ App.Views.EditorClass = Backbone.View.extend({
 	toggleEditing: function() {
 		this.editor.setReadOnly(!this.editor.getReadOnly());
 
-		var $readonlyEditorIconElem = $("#readonlyEditor > span");
+		var $readonlyEditorIconElem = $("#" + this.readonlyId + " > span");
 		if (this.editor.getReadOnly()) $readonlyEditorIconElem.removeClass("fa-eye").addClass("fa-pencil").parent().attr("title", "Enable editing");
 		else $readonlyEditorIconElem.addClass("fa-eye").removeClass("fa-pencil").parent().attr("title", "Disable editing");
 	},

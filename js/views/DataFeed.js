@@ -1,13 +1,17 @@
 ;(function() {
 
 App.Views.DataFeedClass = Backbone.View.extend({
-	initialize: function() {
-		$("#pause").click(this.togglePaused.bind(this));
+	initialize: function(options) {
+		if (options.$pause) {
+			this.$pause = options.$pause;
+			this.$pause.click(this.togglePaused.bind(this));
+		}
+
 		this.listenTo(this.model, "change:paused", this.onPausedChanged);
 	},
 
 	togglePaused: function() {
-		var $pauseToggle = $("#pause .playPauseToggle");
+		var $pauseToggle = $(".playPauseToggle", this.$pause);
 		if ($pauseToggle.hasClass("fa-pause")) {
 			$pauseToggle.removeClass("fa-pause");
 			$pauseToggle.addClass("fa-play");

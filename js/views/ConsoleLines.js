@@ -1,8 +1,6 @@
 ;(function() {
 
 App.Views.ConsoleLinesClass = Backbone.View.extend({
-	el: "#console",
-
 	initialize: function(options) {
 		this.activeFilterKeys = {};
 		this.modelCollection = [];
@@ -18,16 +16,16 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		}, this);
 		this.listenTo(this.filtersModel, "change:activeFilters", this.changeActiveFilters);
 
-		$("#clearConsole").on("click", this.clear.bind(this));
-		$("#favorite").on("click", this.showNextFavorite.bind(this));
-		$("#wrapText").on("click", this.toggleWrapText.bind(this));
-		$("#increaseFontSize").on("click", this.increaseFontSize.bind(this));
-		$("#decreaseFontSize").on("click", this.decreaseFontSize.bind(this));
-		$("#resetFontSize").on("click", this.resetFontSize.bind(this));
+		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
+		$("#" + options.ids.favId).on("click", this.showNextFavorite.bind(this));
+		$("#" + options.ids.wrapId).on("click", this.toggleWrapText.bind(this));
+		$("#" + options.ids.incFontId).on("click", this.increaseFontSize.bind(this));
+		$("#" + options.ids.decFontId).on("click", this.decreaseFontSize.bind(this));
+		$("#" + options.ids.defFontId).on("click", this.resetFontSize.bind(this));
 
 		var $this = this;
 		$(document).keydown(function(e) {
-			if (!isActiveView($this)) return;
+			if (!ViewNavigation.isActiveView($this)) return;
 
 			if (!e.altKey && e.which == 113)
 				$this.showNextFavorite();
@@ -166,7 +164,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 	},
 
 	toggleWrapText : function() {
-		var cons = $("#console");
+		var cons = this.$el;
 		if (cons.attr("wrap")) {
 			cons.removeAttr("wrap").css("overflow-x","auto");
 		} else {
@@ -175,17 +173,15 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 	},
 
 	increaseFontSize : function() {
-		var fontSize = parseInt($("#console").css("font-size")) + 2;
-		$("#console").css("font-size",  fontSize + "px");
+		this.$el.css("font-size", (parseInt(this.$el.css("font-size")) + 2) + "px");
 	},
 
 	decreaseFontSize : function() {
-		var fontSize = parseInt($("#console").css("font-size")) - 2;
-		$("#console").css("font-size", fontSize + "px");
+		this.$el.css("font-size", (parseInt(this.$el.css("font-size")) - 2) + "px");
 	},
 
 	resetFontSize: function() {
-		$("#console").css("font-size", "");
+		this.$el.css("font-size", "");
 	}
 });
 

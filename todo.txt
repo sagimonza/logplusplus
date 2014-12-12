@@ -4,6 +4,7 @@
     - web control data (mc, ctx, page, parent, template, etc.)
     [DONE]- json viewer - https://github.com/josdejong/jsoneditor/
     [DONE]- gallery of images (snapshot)
+- optimize filtering --> move to css with rules on main console element's children
 - make line input when clicking on it (allow navigate in the log document like in editor but with read only mode)
 - remember user preferences on localStorage - filters, config, etc.
 - support URL params: link, config, filters

@@ -3,51 +3,99 @@
 
 window.ViewBuilder = {
 	build: function(options) {
-		var rootHeaderElem = $((_.template($("#headerGenericTemplate").html(), { variable : "args" }))({ actionBarId: options.actionBarId, sidebarOpenerId: options.sidebarOpenerId }));
-		var containerElem = $(".actions-header", rootHeaderElem.get(0));
-		options.headerActions.forEach(function(headerActionId) {
-			containerElem.append((_.template($("#" + headerActionId).html(), { variable : "args" }))(options.headerActionsData)); });
-		$("#main").append($('<div id="' + options.rootId + '">').append(rootHeaderElem).append('<div id="' + options.contentId + '" class="mainContent"></div>'));
+		function addIds(templateId) {
+			template2ids[templateId].forEach(function(prop) { ids[prop] = nextId(); });
+		}
 
-		return this._prepareView(options.viewClass, options.headerActionsData);
+		var ids = {}, viewElems = [];
+		var headerActions = ["headerGenericTemplate"].concat(options.headerActions);
+
+		headerActions.forEach(function(headerActionId) {
+			addIds(headerActionId);
+			viewElems.push((_.template($("#" + headerActionId).html(), { variable : "args" }))(ids));
+		});
+
+		var rootHeaderElem = $((viewElems.splice(0, 1))[0]);
+		var containerElem = $(".actions-header", rootHeaderElem.get(0));
+		viewElems.forEach(function(viewElem) { containerElem.append(viewElem); });
+
+		var contentId = nextId();
+		$("#main").append($('<div id="' + options.rootId + '">').append(rootHeaderElem).append('<div id="' + contentId + '" class="mainContent"></div>'));
+
+		return { view: this._prepareView(options.viewClass, contentId, ids, options.headerActionsData), ids: ids };
 	},
 
-	createFileFeedView: function(props) {
-		if (!props.fileId) return;
+	createFileFeedView: function(ids, props) {
+		if (!ids.fileId) return;
 
 		var fileModel = new App.Models.FileFeedClass({ isDataURL: props.isDataURL });
-		return new App.Views.FileFeedClass({ el: "#" + props.fileId, model: fileModel, $reloadView: $("#" + props.reloadId),
-			$pickedFilename: $("#" + props.filenameId) });
+		return ViewInstanceManager.add("FileFeedClass", { el: "#" + ids.fileId, model: fileModel, $reloadView: $("#" + ids.reloadId),
+			$pickedFilename: $("#" + ids.filenameId), $pause: $("#" + ids.pauseId) });
 	},
 
-	createLinkFeedView: function(props) {
-		if (props.linkId === undefined) return;
+	createLinkFeedView: function(ids, props) {
+		if (!ids.linkId) return;
 
 		var linkModel = new App.Models.LinkFeedClass({ isDataURL: props.isDataURL });
-		return new App.Views.LinkFeedClass({ el: props.linkId ? ("#" + props.linkId) : undefined, $delegateViews: props.delegates && props.delegates.map(function(id) { return $("#" + id); }),
-			model: linkModel, filterRegexp: props.filterRegexp, $reloadView: props.reloadId && $("#" + props.reloadId), $linkOpenerView: $("#" + props.linkOpenerId),
-			$pickedFilename: props.filenameId && $("#" + props.filenameId) });
+		return ViewInstanceManager.add("LinkFeedClass", { el: ("#" + ids.linkId), model: linkModel, filterRegexp: props.filterRegexp,
+			$reloadView: $("#" + ids.reloadId), $linkOpenerView: $("#" + ids.linkOpenerId), $pickedFilename: $("#" + ids.filenameId) });
 	},
 
-	createFiltersView: function(props) {
-		if (!props.filtersId) return;
+	createDelegateLinkFeedView: function(ids) {
+		var delegateIds = ViewInstanceManager.getViews("LinkFeedClass").map(function(view) { return view.$el.attr("id"); }).filter(function(id) { return !!id; });
+		var linkModel = new App.Models.LinkFeedClass();
+		return ViewInstanceManager.add("LinkFeedClass", { $delegateViews: delegateIds.map(function(id) { return $("#" + id); }),
+			model: linkModel, $linkOpenerView: $("#" + ids.linkOpenerId) });
+	},
+
+	createFiltersView: function(ids) {
+		if (!ids.filtersId) return;
 
 		var filtersModel = new App.Models.LineFilterClass();
-		return new App.Views.LineFilterClass({ model: filtersModel });
+		return ViewInstanceManager.add("LineFilterClass", { el: "#" + ids.filtersId, model: filtersModel });
 	},
 
-	_prepareView: function(viewClass, headerActionsData) {
-		var fileFeedView = this.createFileFeedView(headerActionsData);
-		var linkFeedView = this.createLinkFeedView(headerActionsData);
-		var filtersView = this.createFiltersView(headerActionsData);
+	_prepareView: function(viewClass, contentId, ids, headerActionsData) {
+		var fileFeedView = this.createFileFeedView(ids, headerActionsData);
+		var linkFeedView = this.createLinkFeedView(ids, headerActionsData);
+		var filtersView = this.createFiltersView(ids, headerActionsData);
 		if (filtersView) filtersView.render();
 
 		var dataFeedModels = [];
 		if (fileFeedView) dataFeedModels.push(fileFeedView.model);
 		if (linkFeedView) dataFeedModels.push(linkFeedView.model);
 
-		return new App.Views[viewClass]({ dataFeedModels: dataFeedModels, filtersModel: filtersView && filtersView.model });
+		return ViewInstanceManager.add(viewClass, { el: "#" + contentId, ids: ids, dataFeedModels: dataFeedModels, filtersModel: filtersView && filtersView.model });
 	}
+};
+
+var BASE_VIEW_CONTROL_ID = "vc", baseIdCount = 0;
+function nextId() { return BASE_VIEW_CONTROL_ID + (baseIdCount++); }
+
+var template2ids = {
+	headerGenericTemplate: ["actionBarId", "sidebarOpenerId"],
+	headerFeedTemplate: ["fileId", "linkId", "linkOpenerId", "filenameId"],
+	headerFiltersTemplate: ["filtersId"],
+	headerPauseTemplate: ["pauseId"],
+	headerRefreshTemplate: ["clearId", "reloadId"],
+	headerFontTemplate: ["wrapId", "incFontId", "decFontId", "defFontId"],
+	headerFavTemplate: ["favId"],
+	headerReadonlyTemplate: ["readonlyId"],
+	headerSectionTemplate: []
+};
+
+var ViewInstanceManager = window.ViewInstanceManager = {
+	add: function(clazz, options) {
+		if (!this.views[clazz]) this.views[clazz] = [];
+		this.views[clazz].push(new App.Views[clazz](options));
+		return _.last(this.views[clazz]);
+	},
+
+	getViews: function(clazz) {
+		return this.views[clazz] || [];
+	},
+
+	views: {}
 };
 
 })();

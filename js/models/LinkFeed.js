@@ -2,7 +2,7 @@
 
 App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 	initialize: function(options) {
-		this.isDataURL = options.isDataURL;
+		this.isDataURL = options && options.isDataURL;
 	},
 
 	changeLink: function(url) {
