@@ -8,13 +8,11 @@ App.Views.MenuSidebarClass = Backbone.View.extend({
 
 	initialize: function(options) {
 		$("#shield").click(this.hide.bind(this));
-		options.$menuSidebarOpeners.forEach(function($menuSidebarOpener)  {
-			$menuSidebarOpener.sidr({
-				name: "menu-sidebar",
-				displace: false,
-				onOpen: this.onShow.bind(this)
-			});
-		}, this);
+		options.$menuSidebarOpeners.sidr({
+			name: "menu-sidebar",
+			displace: false,
+			onOpen: this.onShow.bind(this)
+		});
 	},
 
 	hide: function() {

@@ -8,7 +8,6 @@ window.App = {
 
 $(document).ready(function() {
 
-	var menuOpenerIds = [];
 	var mainViews =	[
 		{	viewClass: "ConsoleLinesClass",
 			rootId: "console-view",
@@ -40,11 +39,11 @@ $(document).ready(function() {
 				isDataURL: true
 			}
 		}
-	].map(function(headersDef) { var res = ViewBuilder.build(headersDef); menuOpenerIds.push(res.ids.sidebarOpenerId); return res.view; });
+	].map(function(headersDef) { return ViewBuilder.build(headersDef).view; });
 
 	ViewBuilder.createDelegateLinkFeedView({ linkOpenerId: "feedbackLinkOpener" });
 
-	var menuSidebarView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar", $menuSidebarOpeners: menuOpenerIds.map(function(id) { return $("#" + id); }) });
+	var menuSidebarView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar", $menuSidebarOpeners: $(".menu-sidebar-opener") });
 
 	ViewNavigation.init(menuSidebarView, mainViews);
 
