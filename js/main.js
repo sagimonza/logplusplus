@@ -6,8 +6,7 @@ window.App = {
 	Views:			{}
 };
 
-$(document).ready(function() {
-
+$(document).on("templatesReady", function() {
 	var mainViews =	[
 		{	viewClass: "ConsoleLinesClass",
 			rootId: "console-view",

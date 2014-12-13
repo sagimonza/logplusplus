@@ -1,0 +1,5 @@
+<div class="feedPickerWrapper">
+	<input id="<%= args.fileId %>" type="file" class="filePicker"/>
+	<input id="<%= args.linkId %>" type="text" class="linkPicker"/>
+	<a id="<%= args.linkOpenerId %>" href="#urlPopup" class="linkOpener header-action padded-header-action feedPickerButton" title="Open url..."><span class="fa fa-link"></span></a><span class="header-action-section"></span><a href="javascript:void(0)" class="feedPickerButton header-action padded-header-action" onclick="$('#<%= args.fileId %>').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="<%= args.filenameId %>" class="filename"></div>
+</div>

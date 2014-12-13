@@ -56,68 +56,18 @@
 
     <div id="shield" class="hidden"></div>
 
-    <script type="text/template" id="headerGenericTemplate">
-        <div id="<%= args.actionBarId %>" class="header">
-            <div class="actions-header">
-                <a id="<%= args.sidebarOpenerId %>" class="menu-sidebar-opener" href="#menu-sidebar"><span class="fa fa-bars"></span></a>
-            </div>
-        </div>
-    </script>
+    <script type="text/template" id="headerGenericTemplate"></script>
+    <script type="text/template" id="headerFeedTemplate"></script>
+    <script type="text/template" id="headerFiltersTemplate"></script>
+    <script type="text/template" id="headerPauseTemplate"></script>
+    <script type="text/template" id="headerRefreshTemplate"></script>
+    <script type="text/template" id="headerFontTemplate"></script>
+    <script type="text/template" id="headerFavTemplate"></script>
+    <script type="text/template" id="headerReadonlyTemplate"></script>
+    <script type="text/template" id="headerSectionTemplate"></script>
 
-    <script type="text/template" id="headerFeedTemplate">
-        <div class="feedPickerWrapper">
-            <input id="<%= args.fileId %>" type="file" class="filePicker"/>
-            <input id="<%= args.linkId %>" type="text" class="linkPicker"/>
-            <a id="<%= args.linkOpenerId %>" href="#urlPopup" class="linkOpener header-action padded-header-action feedPickerButton" title="Open url..."><span class="fa fa-link"></span></a><span class="header-action-section"></span><a href="javascript:void(0)" class="feedPickerButton header-action padded-header-action" onclick="$('#<%= args.fileId %>').click();" title="Open file..."><span class="fa fa-file-text"></span></a><div id="<%= args.filenameId %>" class="filename"></div>
-        </div>
-    </script>
-
-    <script type="text/template" id="headerFiltersTemplate">
-        <select id="<%= args.filtersId %>" multiple></select>
-    </script>
-
-    <script type="text/template" id="headerPauseTemplate">
-        <a id="<%= args.pauseId %>" href="javascript:void(0)" class="header-action padded-header-action" title="Pause/Resume"><span class="playPauseToggle fa fa-pause"></span></a>
-    </script>
-
-    <script type="text/template" id="headerRefreshTemplate">
-        <a id="<%= args.clearId %>" href="javascript:void(0)" class="header-action padded-header-action header-remove-action" title="Clear content (Alt+C)"><span class="fa fa-remove"></span></a>
-        <a id="<%= args.reloadId %>" href="javascript:void(0)" class="reload header-action padded-header-action" title="Reload file (Alt+R)"><span class="fa fa-refresh"></span></a>
-    </script>
-
-    <script type="text/template" id="headerFontTemplate">
-        <a id="<%= args.wrapId %>" href="javascript:void(0)" class="wrapText header-action padded-header-action" title="Wrap Text (Alt+W)"><span class="fa fa-align-justify"></span></a>
-        <span class="header-action-section"></span>
-        <a id="<%= args.incFontId %>" href="javascript:void(0)" class="increaseFontSize header-action padded-header-action" title="Increase font size (Alt+)"><span class="fa fa-plus"></span></a>
-        <a id="<%= args.decFontId %>" href="javascript:void(0)" class="decreaseFontSize header-action padded-header-action" title="Decrease font size (Alt-)"><span class="fa fa-minus"></span></a>
-        <a id="<%= args.defFontId %>" href="javascript:void(0)" class="decreaseFontSize header-action padded-header-action" title="Reset font size"><span class="fa fa-undo"></span></a>
-    </script>
-
-    <script type="text/template" id="headerFavTemplate">
-        <a id="<%= args.favId %>" href="javascript:void(0)" class="header-action padded-header-action" title="Next Favorite (F2)"><span class="fa fa-star"></span></a>
-    </script>
-
-    <script type="text/template" id="headerReadonlyTemplate">
-        <a id="<%= args.readonlyId %>" href="javascript:void(0)" class="header-action padded-header-action" title="Enable editing"><span class="fa fa-pencil"></span></a>
-    </script>
-
-    <script type="text/template" id="headerSectionTemplate">
-        <span class="header-action-section"></span>
-    </script>
-
-    <script type="text/template" id="lineFilterTemplate">
-        <% _.each(args.categories, function(category) { %>
-        <optgroup label="<%= category %>">
-            <% _.each(args.filters[category], function(filter) { %>
-            <option value="<%= filter.filterKey %>"><%= filter.name %></option>
-            <% }); %>
-        </optgroup>
-        <% }); %>
-    </script>
-
-    <script type="text/template" id="consoleLineTemplate">
-        <div type="<%= args.type %>" severity="<%= args.severity %>" class="log-line <%= args.severity %>"  ><%= args.text %></div>
-    </script>
+    <script type="text/template" id="lineFilterTemplate"></script>
+    <script type="text/template" id="consoleLineTemplate"></script>
 
     <script src="js/main.js"></script>
 
@@ -150,6 +100,8 @@
     <script src="js/views/Editor.js"></script>
     <script src="js/views/jsonViewer.js"></script>
     <script src="js/views/galleryViewer.js"></script>
+
+    <script src="js/helpers/templatesLoader.js"></script>
 </body>
 
 </html>

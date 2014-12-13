@@ -1,0 +1,7 @@
+<% _.each(args.categories, function(category) { %>
+<optgroup label="<%= category %>">
+    <% _.each(args.filters[category], function(filter) { %>
+    <option value="<%= filter.filterKey %>"><%= filter.name %></option>
+    <% }); %>
+</optgroup>
+<% }); %>

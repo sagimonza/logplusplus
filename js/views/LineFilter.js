@@ -1,10 +1,9 @@
 ;(function() {
 
 App.Views.LineFilterClass = Backbone.View.extend({
-	template: _.template($("#lineFilterTemplate").html(), { variable : "args" }),
-
 	render: function() {
 		var filterMap = this.model.get("filterMap");
+		this.template = _.template($("#lineFilterTemplate").html(), { variable : "args" });
 		this.$el.html(this.template({
 			categories: Object.keys(filterMap),
 			filters: filterMap
