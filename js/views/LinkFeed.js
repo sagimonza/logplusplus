@@ -19,7 +19,7 @@ App.Views.LinkFeedClass = App.Views.DataFeedClass.extend({
 			},
 			midClick: true
 		});
-		if (!this.options.$delegateViews) this.$el.change(function(e) { return $this.onLinkChanged(e); });
+		if (this.options.el) this.$el.change(function(e) { return $this.onLinkChanged(e); });
 		this.model.filterRegexp = this.options.filterRegexp;
 		App.Views.DataFeedClass.prototype.initialize.apply(this, arguments);
 	},
@@ -37,10 +37,13 @@ App.Views.LinkFeedClass = App.Views.DataFeedClass.extend({
 
 	onUrlSubmit: function(e) {
 		e.preventDefault();
-		if (!this.options.$delegateViews)
+
+		if (this.options.el)
 			this.$el.val($(".urlInput").val()).change();
 		else
-			this.options.$delegateViews.forEach(function($delegateView) { $delegateView.val($(".urlInput").val()).change(); });
+			ViewInstanceManager.getViews("LinkFeedClass").map(function(view) { return view.$el.attr("id") && $("#" + view.$el.attr("id")); })
+				.forEach(function($delegateView) { $delegateView && $delegateView.val($(".urlInput").val()).change(); });
+
 		$.magnificPopup.close();
 		return false;
 	},

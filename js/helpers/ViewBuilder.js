@@ -3,15 +3,11 @@
 
 window.ViewBuilder = {
 	build: function(options) {
-		function addIds(templateId) {
-			template2ids[templateId].forEach(function(prop) { ids[prop] = nextId(); });
-		}
-
-		var ids = {}, viewElems = [];
+		var ids = { rootId: options.rootId, contentId: nextId() }, viewElems = [];
 		var headerActions = ["headerGenericTemplate"].concat(options.headerActions);
 
 		headerActions.forEach(function(headerActionId) {
-			addIds(headerActionId);
+			addTemplateIds(ids, headerActionId);
 			viewElems.push((_.template($("#" + headerActionId).html(), { variable : "args" }))(ids));
 		});
 
@@ -19,10 +15,16 @@ window.ViewBuilder = {
 		var containerElem = $(".actions-header", rootHeaderElem.get(0));
 		viewElems.forEach(function(viewElem) { containerElem.append(viewElem); });
 
-		var contentId = nextId();
-		$("#main").append($('<div id="' + options.rootId + '">').append(rootHeaderElem).append('<div id="' + contentId + '" class="mainContent"></div>'));
+		$("#main").append($('<div id="' + ids.rootId + '">').append(rootHeaderElem).append('<div id="' + ids.contentId + '" class="mainContent"></div>'));
 
-		return { view: this._prepareView(options.viewClass, contentId, ids, options.headerActionsData), ids: ids };
+		return { view: this._prepareView(options.viewClass, options.name, ids, options.headerActionsData), ids: ids };
+	},
+
+	createView: function(options) {
+		var ids = {};
+		addViewIds(ids, options.viewType);
+		if (options.createHTML) options.createHTML(ids);
+		return { view: this["create" + options.viewType](ids), ids: ids };
 	},
 
 	createFileFeedView: function(ids, props) {
@@ -42,10 +44,8 @@ window.ViewBuilder = {
 	},
 
 	createDelegateLinkFeedView: function(ids) {
-		var delegateIds = ViewInstanceManager.getViews("LinkFeedClass").map(function(view) { return view.$el.attr("id"); }).filter(function(id) { return !!id; });
 		var linkModel = new App.Models.LinkFeedClass();
-		return ViewInstanceManager.add("LinkFeedClass", { $delegateViews: delegateIds.map(function(id) { return $("#" + id); }),
-			model: linkModel, $linkOpenerView: $("#" + ids.linkOpenerId) });
+		return ViewInstanceManager.add("LinkFeedClass", { model: linkModel, $linkOpenerView: $("#" + ids.linkOpenerId) });
 	},
 
 	createFiltersView: function(ids) {
@@ -55,7 +55,7 @@ window.ViewBuilder = {
 		return ViewInstanceManager.add("LineFilterClass", { el: "#" + ids.filtersId, model: filtersModel });
 	},
 
-	_prepareView: function(viewClass, contentId, ids, headerActionsData) {
+	_prepareView: function(viewClass, name, ids, headerActionsData) {
 		var fileFeedView = this.createFileFeedView(ids, headerActionsData);
 		var linkFeedView = this.createLinkFeedView(ids, headerActionsData);
 		var filtersView = this.createFiltersView(ids, headerActionsData);
@@ -65,7 +65,7 @@ window.ViewBuilder = {
 		if (fileFeedView) dataFeedModels.push(fileFeedView.model);
 		if (linkFeedView) dataFeedModels.push(linkFeedView.model);
 
-		return ViewInstanceManager.add(viewClass, { el: "#" + contentId, ids: ids, dataFeedModels: dataFeedModels, filtersModel: filtersView && filtersView.model });
+		return ViewInstanceManager.add(viewClass, { el: "#" + ids.contentId, name: name, ids: ids, dataFeedModels: dataFeedModels, filtersModel: filtersView && filtersView.model });
 	}
 };
 
@@ -83,6 +83,19 @@ var template2ids = {
 	headerReadonlyTemplate: ["readonlyId"],
 	headerSectionTemplate: []
 };
+
+var viewTypes = {
+	DelegateLinkFeedView: { ids: ["linkOpenerId"], mainId: "linkOpenerId" }
+};
+
+function addTemplateIds(ids, templateId) {
+	template2ids[templateId].forEach(function(prop) { ids[prop] = nextId(); });
+}
+
+function addViewIds(ids, viewType) {
+	viewTypes[viewType].ids.forEach(function(prop) { ids[prop] = nextId(); });
+	ids.mainId = ids[viewTypes[viewType].mainId];
+}
 
 var ViewInstanceManager = window.ViewInstanceManager = {
 	add: function(clazz, options) {

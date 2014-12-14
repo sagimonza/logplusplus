@@ -7,8 +7,9 @@ window.App = {
 };
 
 $(document).on("templatesReady", function() {
-	var mainViews =	[
+	var mainViewObjs =	[
 		{	viewClass: "ConsoleLinesClass",
+			name: "Console",
 			rootId: "console-view",
 			headerActions: ["headerFeedTemplate", "headerFiltersTemplate", "headerPauseTemplate", "headerSectionTemplate",
 				"headerRefreshTemplate", "headerSectionTemplate", "headerFontTemplate", "headerSectionTemplate", "headerFavTemplate"],
@@ -17,6 +18,7 @@ $(document).on("templatesReady", function() {
 			}
 		},
 		{	viewClass: "EditorClass",
+			name: "Editor",
 			rootId: "xml-view",
 			headerActions: ["headerFeedTemplate", "headerRefreshTemplate", "headerSectionTemplate", "headerReadonlyTemplate"],
 			headerActionsData: {
@@ -24,6 +26,7 @@ $(document).on("templatesReady", function() {
 			}
 		},
 		{	viewClass: "JsonViewerClass",
+			name: "JSON Viewer",
 			rootId: "json-view",
 			headerActions: ["headerFeedTemplate", "headerRefreshTemplate"],
 			headerActionsData: {
@@ -31,6 +34,7 @@ $(document).on("templatesReady", function() {
 			}
 		},
 		{	viewClass: "GalleryViewerClass",
+			name: "Gallery",
 			rootId: "gallery-view",
 			headerActions: ["headerFeedTemplate", "headerRefreshTemplate"],
 			headerActionsData: {
@@ -38,15 +42,9 @@ $(document).on("templatesReady", function() {
 				isDataURL: true
 			}
 		}
-	].map(function(headersDef) { return ViewBuilder.build(headersDef).view; });
+	].map(function(headersDef) { return ViewBuilder.build(headersDef); });
 
-	ViewBuilder.createDelegateLinkFeedView({ linkOpenerId: "feedbackLinkOpener" });
-
-	var menuSidebarView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar", $menuSidebarOpeners: $(".menu-sidebar-opener") });
-
-	ViewNavigation.init(menuSidebarView, mainViews);
-
-	ViewNavigation.setActiveView("console-view");
+	ViewNavigation.init(mainViewObjs, [{ viewType: "DelegateLinkFeedView", name: "Open Feedback..." }], "console-view");
 
 	$(".reload").click(function() {
 		var view = $(this).prop("activeFeedView");

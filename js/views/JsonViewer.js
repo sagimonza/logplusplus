@@ -1,9 +1,8 @@
 ;(function() {
 
-App.Views.GalleryViewerClass = Backbone.View.extend({
+App.Views.JsonViewerClass = Backbone.View.extend({
 	initialize: function(options) {
-		this.image = document.createElement("img");
-		this.el.appendChild(this.image);
+		this.editor = new JSONEditor(this.el, { mode: "view", modes: ["view", "form", "code"] });
 
 		this.dataFeedModels = options.dataFeedModels;
 		this.dataFeedModels.forEach(function(dataFeedModel) {
@@ -11,15 +10,19 @@ App.Views.GalleryViewerClass = Backbone.View.extend({
 			this.listenTo(dataFeedModel, "dataAvailable", this.onDataAvailable);
 		}, this);
 
-		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
+		this.name = options.name;
+
+		var $this = this;
+		$("#" + this.clearId).on("click", this.clear.bind(this));
 	},
 
 	clear: function() {
-		this.image.src = "";
+		this.editor.set({});
 	},
 
 	onDataAvailable: function(model, data) {
-		this.image.src = "data:image/png;base64," + data;
+		this.editor.setText(data);
+		this.editor.expandAll();
 	}
 });
 

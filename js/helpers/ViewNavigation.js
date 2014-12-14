@@ -2,9 +2,10 @@
 ;(function() {
 
 window.ViewNavigation = {
-	init: function(navView, mainViews) {
-		this._navView = navView;
-		this._mainViews = mainViews;
+	init: function(mainViewObjs, sidebarActionObjs, activeViewId) {
+		this._navView = new App.Views.MenuSidebarClass({ el: "#menu-sidebar", mainViewObjs: mainViewObjs, sidebarActionObjs: sidebarActionObjs });
+		this._mainViews = mainViewObjs.map(function(mainViewObj) { return mainViewObj.view; });
+		this.setActiveView(activeViewId);
 	},
 
 	getActiveView: function() {

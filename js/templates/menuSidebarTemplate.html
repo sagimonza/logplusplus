@@ -1,0 +1,5 @@
+<ul>
+    <% _.each(args.contentObjs, function(contentData, index) { %>
+        <li class="sidebar-content-menu-item" data-content-id="<%= contentData.rootId %>" title="Switch to <%= contentData.name %> (Alt+<%= index + 1 %>)"><a href="#"><%= contentData.name %></a></li>
+    <% }); %>
+</ul>

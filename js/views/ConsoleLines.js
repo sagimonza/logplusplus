@@ -7,6 +7,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		this.dataFeedModels = options.dataFeedModels;
 		this.filtersModel = options.filtersModel;
+		this.name = options.name;
 
 		this.dataFeedModels.forEach(function(dataFeedModel) {
 			this.listenTo(dataFeedModel, "change:feed", this.clear);

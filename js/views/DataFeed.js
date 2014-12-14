@@ -7,6 +7,8 @@ App.Views.DataFeedClass = Backbone.View.extend({
 			this.$pause.click(this.togglePaused.bind(this));
 		}
 
+		this.name = options.name;
+
 		this.listenTo(this.model, "change:paused", this.onPausedChanged);
 	},
 

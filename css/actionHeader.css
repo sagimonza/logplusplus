@@ -26,18 +26,18 @@
 
 .actions-header .header-action:hover {
     background-color: #505255;
-    border-top: 1px solid #fbfbfb;
-    border-bottom: 1px solid #fbfbfb;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
 }
 
 .actions-header .padded-header-action {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .actions-header .header-action-section {
-    border-right: 1px solid #fbfbfb;
-    border-left: 1px solid #fbfbfb;
+    border-right: 1px solid grey;
+    border-left: 1px solid grey;
     vertical-align: middle;
 }
 

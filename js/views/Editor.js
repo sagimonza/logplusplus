@@ -3,10 +3,6 @@
 App.Views.EditorClass = Backbone.View.extend({
 	initialize: function(options) {
 		this.editor = ace.edit(this.$el.attr("id"));
-		this.editor.setTheme("ace/theme/monokai");
-		this.editor.getSession().setMode("ace/mode/xml");
-		this.editor.setReadOnly(true);
-		this.editor.setPrintMarginColumn(1000);
 
 		this.dataFeedModels = options.dataFeedModels;
 		this.dataFeedModels.forEach(function(dataFeedModel) {
@@ -15,6 +11,13 @@ App.Views.EditorClass = Backbone.View.extend({
 		}, this);
 
 		this.readonlyId = options.ids.readonlyId;
+
+		this.name = options.name;
+
+		this.editor.setTheme("ace/theme/monokai");
+		this.editor.getSession().setMode("ace/mode/xml");
+		this.editor.setReadOnly(true);
+		this.editor.setPrintMarginColumn(1000);
 
 		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
 		$("#" + options.ids.readonlyId).click(this.toggleEditing.bind(this));

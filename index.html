@@ -32,14 +32,6 @@
     </div>
 
     <div id="menu-sidebar">
-        <ul>
-            <li class="sidebar-menu-item active" data-content-id="console-view" title="Switch to Console (Alt+1)"><a href="#">Console</a></li>
-            <li class="sidebar-menu-item" data-content-id="xml-view" title="Switch to XML (Alt+2)"><a href="#">XML</a></li>
-            <li class="sidebar-menu-item" data-content-id="json-view" title="Switch to JSON (Alt+3)"><a href="#">JSON Viewer</a></li>
-            <li class="sidebar-menu-item" data-content-id="gallery-view" title="Switch to Gallery (Alt+4)"><a href="#">Gallery</a></li>
-            <!--<li class="sidebar-menu-item" data-content-id="emulator-view"><a href="#">Emulator</a></li>-->
-            <li id="globalFeedback"><a id="feedbackLinkOpener" href="#urlPopup">Open Feedback...</a></li>
-        </ul>
     </div>
 
     <div id="urlPopup" class="white-popup mfp-hide">
@@ -64,6 +56,9 @@
 
     <script type="text/template" id="lineFilterTemplate"></script>
     <script type="text/template" id="consoleLineTemplate"></script>
+
+    <script type="text/template" id="menuSidebarTemplate"></script>
+    <script type="text/template" id="menuSidebarActionTemplate"></script>
 
     <script src="js/main.js"></script>
 
@@ -90,10 +85,10 @@
     <script src="js/views/ConsoleLines.js"></script>
 
     <script src="js/views/Editor.js"></script>
-    <script src="js/views/jsonViewer.js"></script>
-    <script src="js/views/galleryViewer.js"></script>
+    <script src="js/views/JsonViewer.js"></script>
+    <script src="js/views/GalleryViewer.js"></script>
 
-    <script src="js/helpers/templatesLoader.js"></script>
+    <script src="js/helpers/TemplatesLoader.js"></script>
 </body>
 
 </html>
