@@ -7,6 +7,8 @@ window.App = {
 };
 
 $(document).on("templatesReady", function() {
+	$(document.body).append('<link href="//fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">');
+	
 	var mainViewObjs =	[
 		{	viewClass: "ConsoleLinesClass",
 			name: "Console",
