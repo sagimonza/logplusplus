@@ -18,6 +18,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 
 		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
 		$("#" + options.ids.favId).on("click", this.showNextFavorite.bind(this));
+		$("#" + options.ids.clearFavId).on("click", this.clearFavorites.bind(this));
 		$("#" + options.ids.wrapId).on("click", this.toggleWrapText.bind(this));
 		$("#" + options.ids.incFontId).on("click", this.increaseFontSize.bind(this));
 		$("#" + options.ids.decFontId).on("click", this.decreaseFontSize.bind(this));
@@ -161,6 +162,10 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 			currentSelection.removeAllRanges();
 			currentSelection.addRange(range);
 		}
+	},
+
+	clearFavorites: function() {
+		$(".log-line > .fa-star").parent().each(function() { this.__model.favorite = false; });
 	},
 
 	toggleWrapText : function() {

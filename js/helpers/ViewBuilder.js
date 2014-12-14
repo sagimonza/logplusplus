@@ -79,7 +79,7 @@ var template2ids = {
 	headerPauseTemplate: ["pauseId"],
 	headerRefreshTemplate: ["clearId", "reloadId"],
 	headerFontTemplate: ["wrapId", "incFontId", "decFontId", "defFontId"],
-	headerFavTemplate: ["favId"],
+	headerFavTemplate: ["favId", "clearFavId"],
 	headerReadonlyTemplate: ["readonlyId"],
 	headerSectionTemplate: []
 };
