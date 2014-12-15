@@ -59,13 +59,12 @@ window.ViewBuilder = {
 		var fileFeedView = this.createFileFeedView(ids, headerActionsData);
 		var linkFeedView = this.createLinkFeedView(ids, headerActionsData);
 		var filtersView = this.createFiltersView(ids, headerActionsData);
-		if (filtersView) filtersView.render();
 
 		var dataFeedModels = [];
 		if (fileFeedView) dataFeedModels.push(fileFeedView.model);
 		if (linkFeedView) dataFeedModels.push(linkFeedView.model);
 
-		return ViewInstanceManager.add(viewClass, { el: "#" + ids.contentId, name: name, ids: ids, dataFeedModels: dataFeedModels, filtersModel: filtersView && filtersView.model });
+		return ViewInstanceManager.add(viewClass, { el: "#" + ids.contentId, name: name, ids: ids, dataFeedModels: dataFeedModels, filtersView: filtersView });
 	}
 };
 

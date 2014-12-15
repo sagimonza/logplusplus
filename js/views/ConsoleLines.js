@@ -6,7 +6,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		this.modelCollection = [];
 
 		this.dataFeedModels = options.dataFeedModels;
-		this.filtersModel = options.filtersModel;
+		this.filtersView = options.filtersView;
 		this.name = options.name;
 
 		this.dataFeedModels.forEach(function(dataFeedModel) {
@@ -15,7 +15,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 			this.listenTo(dataFeedModel, "change:paused", this.onPausedToggled);
 			this.listenTo(dataFeedModel, "dataAvailable", this.onDataAvailable);
 		}, this);
-		this.listenTo(this.filtersModel, "change:activeFilters", this.changeActiveFilters);
+		this.listenTo(this.filtersView.model, "change:activeFilters", this.changeActiveFilters);
 
 		$("#" + options.ids.clearId).on("click", this.clear.bind(this));
 		$("#" + options.ids.favId).on("click", this.showNextFavorite.bind(this));
@@ -42,6 +42,8 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		$(document).click(function(e) {
 			if ($(e.target).hasClass("log-favorite")) $this.toggleFavorite(e);
 		});
+
+		this.filtersView.render();
 	},
 
 	clear: function() {
