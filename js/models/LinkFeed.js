@@ -10,7 +10,16 @@ App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 			var zipObj = new JSZip(zipData);
 			return Object.keys(zipObj.files).some(function(filename) {
 				if ($this.filterRegexp.test(filename)) {
-					var data = !$this.isDataURL ? zipObj.file(filename).asText() : btoa(String.fromCharCode.apply(null, zipObj.file(filename).asUint8Array()));
+					var data;
+					if (!$this.isDataURL) data = zipObj.file(filename).asText();
+					else {
+						var uint8Arr = zipObj.file(filename).asUint8Array(), binData = "";
+						for (var i = 0; i < uint8Arr.length; i += 10000) {
+							binData += String.fromCharCode.apply(null, uint8Arr.subarray(i, Math.min(i + 10000, uint8Arr.length)));
+						}
+						data = btoa(binData);
+					}
+
 					$this.onDataAvailable(data);
 					return true;
 				} else if (/.zip$/.test(filename)) {
