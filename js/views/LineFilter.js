@@ -24,6 +24,8 @@ App.Views.LineFilterClass = Backbone.View.extend({
 			onClick: setFilters
 		});
 
+		this.$el.multipleSelect("checkAll");
+
 		return this;
 	},
 
