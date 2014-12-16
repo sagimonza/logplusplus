@@ -8,7 +8,9 @@ App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 	changeLink: function(url) {
 		function extractFeedFromZip(zipData) {
 			var zipObj = new JSZip(zipData);
-			return Object.keys(zipObj.files).some(function(filename) {
+			var files = Object.keys(zipObj.files);
+			files.sort(function(file1, file2) { return file1.split("/").length - file2.split("/").length; });
+			return files.some(function(filename) {
 				if ($this.filterRegexp.test(filename)) {
 					var data;
 					if (!$this.isDataURL) data = zipObj.file(filename).asText();
