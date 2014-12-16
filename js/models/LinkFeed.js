@@ -22,7 +22,7 @@ App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 						data = btoa(binData);
 					}
 
-					$this.onDataAvailable(data);
+					if (data !== undefined) $this.onDataAvailable(data);
 					return true;
 				} else if (/.zip$/.test(filename)) {
 					return extractFeedFromZip(zipObj.file(filename).asArrayBuffer());

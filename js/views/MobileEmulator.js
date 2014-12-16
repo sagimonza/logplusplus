@@ -49,8 +49,11 @@ App.Views.MobileEmulatorClass = Backbone.View.extend({
 		this._ready = false;
 		$(".mobile-emulator", this.$el).get(0).src = "about:blank";
 
+		var selectedUrl = this.$envSelect.multipleSelect("getSelects")[0];
+		if (!selectedUrl) return;
+
 		var $this = this;
-		_.defer(function() { $(".mobile-emulator", $this.$el).get(0).src = $this.$envSelect.multipleSelect("getSelects")[0]; });
+		_.defer(function() { $(".mobile-emulator", $this.$el).get(0).src = selectedUrl; });
 	},
 
 	onDataAvailable: function(responsesStr) {
