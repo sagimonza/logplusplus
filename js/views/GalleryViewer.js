@@ -22,7 +22,8 @@ App.Views.GalleryViewerClass = Backbone.View.extend({
 	},
 
 	onDataAvailable: function(model, data) {
-		this.image.src = "data:image/png;base64," + data;
+		if (data && data.slice(0, 5) != "data:") data = "data:image/png;base64," + data;
+		this.image.src = data;
 	}
 });
 
