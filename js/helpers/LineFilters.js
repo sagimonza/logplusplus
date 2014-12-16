@@ -4,22 +4,22 @@ var LineFilterRules = [
 	{	desc: "mcActions",
 		categories: ["custom"],
 		names: ["mcActions"],
-		filter: function(line) { return line.mcActions && createFilterKey("custom", "mcActions"); }
+		filter: function(line) { return line.attrs.mcActions && createFilterKey("custom", "mcActions"); }
 	},
 	{	desc: "responses",
 		categories: ["custom"],
 		names: ["responses"],
-		filter: function(line) { return line.responses && createFilterKey("custom", "responses"); }
+		filter: function(line) { return line.attrs.responses && createFilterKey("custom", "responses"); }
 	},
 	{	desc: "remediation",
 		categories: ["custom"],
 		names: ["remediation"],
-		filter: function(line) { return line.remediation && createFilterKey("custom", "remediation"); }
+		filter: function(line) { return line.attrs.remediation && createFilterKey("custom", "remediation"); }
 	},
 	{	desc: "severities",
 		categories: ["error", "warn", "info", "debug", "trace"],
 		names: Object.keys(LineTypes),
-		filter: function(line) { return createFilterKey(line.severity, line.type); }
+		filter: function(line) { return createFilterKey(line.attrs.severity, line.attrs.type); }
 	}
 ];
 

@@ -3,9 +3,8 @@
 window.ConsoleLineView = function(lineModel) {
 	var view = document.createElement("div");
 	var hidden = lineModel.hidden ? "hidden" : "";
-	view.setAttribute("type", lineModel.type);
-	view.setAttribute("severity", lineModel.severity);
-	view.setAttribute("class", "log-line ".concat(lineModel.severity, " ", hidden));
+	Object.keys(lineModel.attrs).forEach(function(attr) { view.setAttribute(attr, lineModel.attrs[attr]); });
+	view.setAttribute("class", "log-line ".concat(lineModel.attrs.severity, " ", hidden));
 
 	var filters = lineModel.filters, filterLen = filters.length;
 	for (var i = 0; i < filterLen; ++i) view.setAttribute("filter" + i, filters[i]);
@@ -14,8 +13,8 @@ window.ConsoleLineView = function(lineModel) {
 	fav.setAttribute("class", "log-favorite fa fa-star-o");
 	view.appendChild(fav);
 
-	if (lineModel.message) {
-		var message = lineModel.message, messageLen = message.length;
+	if (lineModel.attrs.message) {
+		var message = lineModel.attrs.message, messageLen = message.length;
 		for (var  j = 0; j < messageLen; ++j) {
 			switch (message[j][0]) {
 				case "json":

@@ -1,0 +1,5 @@
+<select id="<%= args.envSelectId %>" multiple>
+    <% _.each(args.headersData.envOptions, function(optionObj) { %>
+    <option value="<%= optionObj.value %>"><%= optionObj.name %></option>
+    <% }); %>
+</select>

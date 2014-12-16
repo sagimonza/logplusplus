@@ -2,13 +2,14 @@
 
 window.ConsoleLineModel = function(line, prevLine) {
 	this.text = line;
+	this.attrs = {};
 	this._favorite = false;
 	LineParsers.parse(this);
 
-	if (!LineTypes[this.type]) {
+	if (!LineTypes[this.attrs.type]) {
 		var lastLineModel = prevLine;
-		this.type = (lastLineModel && lastLineModel.type) || "default";
-		this.severity = this.severity || (lastLineModel && lastLineModel.severity) || "info";
+		this.attrs.type = (lastLineModel && lastLineModel.attrs.type) || "default";
+		this.attrs.severity = this.attrs.severity || (lastLineModel && lastLineModel.attrs.severity) || "info";
 	}
 };
 

@@ -143,6 +143,10 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 		// todo: listen to line limits changes
 	},
 
+	getLogLines: function() {
+		return $(".log-line", this.$el);
+	},
+
 	toggleFavorite: function(e) {
 		var model = e.target.parentElement.__model;
 		model.favorite = !model.favorite;

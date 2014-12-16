@@ -6,9 +6,12 @@ window.ViewBuilder = {
 		var ids = { rootId: options.rootId, contentId: nextId() }, viewElems = [];
 		var headerActions = ["headerGenericTemplate"].concat(options.headerActions);
 
+		var templateData = { headersData : options.headerActionsData };
+
+		headerActions.forEach(function(headerActionId) { addTemplateIds(ids, headerActionId); });
+		Object.keys(ids).forEach(function(id) { templateData[id] = ids[id]; });
 		headerActions.forEach(function(headerActionId) {
-			addTemplateIds(ids, headerActionId);
-			viewElems.push((_.template($("#" + headerActionId).html(), { variable : "args" }))(ids));
+			viewElems.push((_.template($("#" + headerActionId).html(), { variable : "args" }))(templateData));
 		});
 
 		var rootHeaderElem = $((viewElems.splice(0, 1))[0]);
@@ -58,6 +61,7 @@ window.ViewBuilder = {
 	_prepareView: function(viewClass, name, ids, headerActionsData) {
 		var fileFeedView = this.createFileFeedView(ids, headerActionsData);
 		var linkFeedView = this.createLinkFeedView(ids, headerActionsData);
+//		var consoleLogFeedView = this.createConsoleLogFeedView(ids, headerActionsData);
 		var filtersView = this.createFiltersView(ids, headerActionsData);
 
 		var dataFeedModels = [];
@@ -80,6 +84,8 @@ var template2ids = {
 	headerFontTemplate: ["wrapId", "incFontId", "decFontId", "defFontId"],
 	headerFavTemplate: ["favId", "clearFavId"],
 	headerReadonlyTemplate: ["readonlyId"],
+	headerEnvSelectionTemplate: ["envSelectId"],
+	headerImportConsoleLinesTemplate: ["importLinesId"],
 	headerSectionTemplate: []
 };
 
