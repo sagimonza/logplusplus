@@ -3,7 +3,7 @@
 window.ConsoleLineView = function(lineModel) {
 	var view = document.createElement("div");
 	var hidden = lineModel.hidden ? "hidden" : "";
-	Object.keys(lineModel.attrs).forEach(function(attr) { view.setAttribute(attr, lineModel.attrs[attr]); });
+	Object.keys(lineModel.attrs).forEach(function(attr) { if (attr != "message") view.setAttribute(attr, lineModel.attrs[attr]); });
 	view.setAttribute("class", "log-line ".concat(lineModel.attrs.severity, " ", hidden));
 
 	var filters = lineModel.filters, filterLen = filters.length;
