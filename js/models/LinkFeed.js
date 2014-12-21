@@ -37,7 +37,6 @@ App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 
 		if (this.xhr) this.xhr.abort();
 		this.xhr = new XMLHttpRequest();
-		if (/.zip$/.test(url)) this.xhr.responseType = "arraybuffer";
 		this.xhr.addEventListener("load", function() {
 			console.log("loaded url:" + url);
 			if ($this.xhr.responseType != "arraybuffer") $this.onDataAvailable($this.xhr.response);
@@ -45,6 +44,7 @@ App.Models.LinkFeedClass = App.Models.DataFeedClass.extend({
 		});
 		console.log("sending xhr to:" + url);
 		this.xhr.open("GET", url);
+		if (/.zip$/.test(url)) this.xhr.responseType = "arraybuffer";
 		this.xhr.send();
 	},
 
