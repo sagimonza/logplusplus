@@ -154,7 +154,7 @@ App.Views.ConsoleLinesClass = Backbone.View.extend({
 
 	showNextFavorite: function() {
 		var currentSelection = window.getSelection();
-		var view = $(currentSelection.baseNode).closest(".log-line");
+		var view = $(currentSelection.anchorNode).closest(".log-line");
 		var nextFavorite = $("~ .log-line:not(.hidden) > .fa-star", view).get(0);
 		if (!nextFavorite) {
 			var firstModel = this.modelCollection[0];
